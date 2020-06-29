@@ -3,7 +3,7 @@
 #include "Export_Function.h"
 #include "ColliderManager.h"
 #include "Shield.h"
-
+#include "Gauge.h"
 CRussianHat::CRussianHat(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrName,_uint uiIdx, _uint uiStageIdx )
 	: CDynamicObject(pGraphicDev,wstrName,uiIdx, uiStageIdx)
 {
@@ -253,6 +253,17 @@ void CRussianHat::StateMachine()
 
 		case RUSSIAN_BATTLE_START:
 		{
+			Engine::CLayer*	pLayer = Engine::Get_Layer(L"UI");
+			Engine::CGameObject *pGameObject = nullptr;
+
+			pGameObject= m_pHPGauge = CGauge::Create(m_pGraphicDev, L"BossHPBar", _vec3(WINCX*0.5, 20.f, 0.1f), PIVOT_M);
+			pLayer->Add_GameObject(L"Boss_HPBar", pGameObject);
+		
+
+			pGameObject = m_pHPGauge = CGauge::Create(m_pGraphicDev, L"BossHP", _vec3(WINCX*0.5, 20.f, 0.09f), PIVOT_M, _vec3(0.05f, 0.f, 1.0f));
+			pLayer->Add_GameObject(L"Boss_HP", pGameObject);
+
+
 			m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_ATTACK, false);
 
 			m_fAnimSpeed = 2.5f;

@@ -13,8 +13,6 @@
 #include "Davis.h"
 #include "UI.h"
 #include "Gauge.h"
-#include "3DUI.h"
-#include "LockOn.h"
 #include "Effect.h"
 
 //#include "SoundMgr.h"
@@ -191,17 +189,14 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Shield", pGameObject), E_FAIL);
 
 
-		//pGameObject = CRedDevil::Create(m_pGraphicDev, L"RedDevil",0,_vec3(-10.72f,0.338f,7.8f),48);
-		//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-		//FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+	//pGameObject = CRedDevil::Create(m_pGraphicDev, L"RedDevil",0,_vec3(-10.72f,0.338f,7.8f),48);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
 
 
-		//pGameObject = CEffect::Create(m_pGraphicDev);
-		//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-		//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Effect", pGameObject), E_FAIL);
-
-
-
+	//pGameObject = CEffect::Create(m_pGraphicDev);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Effect", pGameObject), E_FAIL);
 
 	//	pGameObject = CHalberd::Create(m_pGraphicDev, 0);
 	//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -211,20 +206,13 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 		//NULL_CHECK_RETURN(pGameObject, E_FAIL);
 		//FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
 
-
 	//	pGameObject = CHalberd::Create(m_pGraphicDev, 1);
 	//	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	//	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
 
-
-
 	//pGameObject = CCocoonDevil::Create(m_pGraphicDev, L"CocoonDevil", 0, _vec3(-15.36f, 0.9416f, -7.8253), 65);
 	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
-
-
-	//	int a = 3;
-
 	//}
 
 
@@ -236,7 +224,7 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	switch ((LOADMODE)m_uiStageIdx)
 	{
 	case LOAD_NOMAL:
-		Load_Text(L"../../Resource/Data/Base.txt");
+		Load_Text(L"../../Resource/Data/Base2.txt");
 		break;
 	case LOAD_NOMAL2:
 		Load_Text(L"../../Resource/Data/SnowMap.txt");
@@ -267,6 +255,7 @@ HRESULT CStage::Ready_UI_Layer(const _tchar* pLayerTag)
 	NULL_CHECK_RETURN(pLayer, E_FAIL);
 
 	Engine::CGameObject*		pGameObject = nullptr;
+
 /*
 	auto	iter = find_if(m_pLayerMap.begin(), m_pLayerMap.end(), [](map<wstring, Engine::CLayer*>::const_iterator mapIter)
 	{
@@ -298,13 +287,7 @@ HRESULT CStage::Ready_UI_Layer(const _tchar* pLayerTag)
 
 
 
-	//pGameObject = C3DUI::Create(m_pGraphicDev, L"BossHPBar");
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"3DUI", pGameObject), E_FAIL);
 
-	pGameObject = CLockOn::Create(m_pGraphicDev, L"LockOnSite");
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LockOnUI", pGameObject), E_FAIL);
 
 	m_pLayerMap.emplace(pLayerTag, pLayer);
 

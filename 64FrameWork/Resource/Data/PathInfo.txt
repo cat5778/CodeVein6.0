@@ -12,12 +12,6 @@ Davis
 ..\..\Resource\Mesh\DynamicMesh\Davis\
 
 
-OldPlayer2
-Player2.X
-Player2
-..\..\Resource\Mesh\DynamicMesh\OldPlayer2\Player2\
-
-
 DynamicMesh
 Player.X
 Player
@@ -124,6 +118,12 @@ StaticMesh
 SM_EntranceDoor_ba01.X
 SM_EntranceDoor_ba01
 ..\..\Resource\Mesh\StaticMesh\Base\Door\SM_EntranceDoor_ba01\
+Environment
+Base
+StaticMesh
+SK_NewCheckPoint.X
+SK_NewCheckPoint
+..\..\Resource\Mesh\StaticMesh\Base\Environment\SK_NewCheckPoint\
 Environment
 Base
 StaticMesh
@@ -472,6 +472,18 @@ StaticMesh
 Map3.X
 Map3
 ..\..\Resource\Mesh\StaticMesh\Snow\Map3\Map3\
+SM_SkySphere_st09a1
+Snow
+StaticMesh
+SM_SkySphere_st09a1.X
+SM_SkySphere_st09a1
+..\..\Resource\Mesh\StaticMesh\Snow\SM_SkySphere_st09a1\SM_SkySphere_st09a1\
+SM_Sky_ba01
+Snow
+StaticMesh
+SM_Sky_ba01.X
+SM_Sky_ba01
+..\..\Resource\Mesh\StaticMesh\Snow\SM_Sky_ba01\SM_Sky_ba01\
 Terrain
 Snow
 StaticMesh

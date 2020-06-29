@@ -5,6 +5,9 @@
 #include "ThirdPersonCamera.h"
 #include "ColliderManager.h"
 #include "DynamicObject.h"
+#include "LockOn.h"
+#include "3DUI.h"
+
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
 {
@@ -105,15 +108,14 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_SPGauge", pGameObject), E_FAIL);
 
+	pGameObject = CLockOn::Create(m_pGraphicDev, L"LockOnSite");
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LockOnUI", pGameObject), E_FAIL);
 
-	//pGameObject= m_pSPGaugeBar = CGauge::Create(m_pGraphicDev, L"BossHPBar", _vec3(WINCX*0.5, 20.f, 0.1f), PIVOT_M);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Boss_HPBar", pGameObject), E_FAIL);
 
-	//pGameObject =m_pSPGauge= CGauge::Create(m_pGraphicDev, L"BossHP", _vec3(WINCX*0.5, 20.f, 0.09f), PIVOT_M, _vec3(0.05f, 0.f, 1.0f));
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Boss_HP", pGameObject), E_FAIL);
-
+	pGameObject = C3DUI::Create(m_pGraphicDev, L"BossHPBar");
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"3DUI", pGameObject), E_FAIL);
 
 	return S_OK;
 }
@@ -127,10 +129,11 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 	m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_ATTACK, false);
 	if (m_eCurState >= OBJ_HURT_F && m_eCurState <= OBJ_STRONG_HURT_L)
 		KnockBack(fTimeDelta);
-	else
+	else if (m_eCurState == OBJ_GUARD_H)
+		Guard_H(fTimeDelta);
+	else 
 		Key_Input(fTimeDelta);
 	
-
 	StateMachine();
 	if (m_eCurState >= OBJ_ATTACK && m_eCurState <= OBJ_CHARGE_ATTACK)
 	{
@@ -157,11 +160,10 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 	}
 
 
-
 	//_vec3 vPos = *m_pTransformCom->Get_Info(Engine::INFO_POS);
 	//cout << "X=" << vPos.x << "y=" << vPos.y << "Z=" << vPos.z << endl;
 	//cout << "Cur Cell " << m_pNaviCom->Get_CurIndex() << endl;
-	Guard_H(fTimeDelta);
+	//Guard_H(fTimeDelta);
 
 
 	Collision_Check(fTimeDelta);
@@ -385,7 +387,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 				{
 					m_eCurState = OBJ_DODGE_ATTACK;
 					m_pMeshCom->Set_AnimationSet(23);
-					m_fCurSP -= 10.f;
 
 				}
 
@@ -859,6 +860,7 @@ void CPlayer::StateMachine()
 			m_fAnimSpeed = 2.25f;
 			m_fSpeed = 10.f;
 			m_fRotSpeed = 10.f;
+			m_fCurSP -= 10.f;
 
 			if (m_bIsLockOn)
 			{
@@ -906,6 +908,7 @@ void CPlayer::StateMachine()
 		case OBJ_STRONG_ATTACK:
 		{
 			m_fAnimSpeed = 2.f;
+			m_fCurSP -= 30.f;
 
 			m_pMeshCom->Set_AnimationSet(28);
 			m_fChargeTime = 0.f;
@@ -927,6 +930,7 @@ void CPlayer::StateMachine()
 		case OBJ_GUARD_H:
 			m_fAnimSpeed = 1.f;
 			m_pMeshCom->Set_AnimationSet(19);
+			m_fCurSP -= 30.f;
 			break;
 
 		case OBJ_HURT_F://10
@@ -1012,6 +1016,7 @@ void CPlayer::StateMachine()
 		break;
 		case OBJ_DODGE_ATTACK:
 		{
+			m_fCurSP -= 10.f;
 
 		}
 			break;
@@ -1162,10 +1167,20 @@ void CPlayer::Guard(_float fTimeDelta)
 {
 	if (m_eCurState == OBJ_GUARD)
 	{
+		if (m_fCurSP <= 0.f)
+		{
+			m_eCurState = OBJ_IDLE;
+			return;
+		}
 		if (Get_AniRatio() >= 0.1f)
 		{
 			m_bIsGuard = true;
+			if(m_bIsLockOn)
+				RotateToLook(fTimeDelta);
+			m_fCurSP -= fTimeDelta*7.f;
 		}
+
+
 	}
 	m_eCurState = OBJ_GUARD;
 }
@@ -1175,8 +1190,22 @@ void CPlayer::Guard_H(_float fTimeDelta)
 {
 	if (m_eCurState == OBJ_GUARD_H)
 	{
+		if (m_fCurSP < 0.f)
+		{
+			m_eCurState = OBJ_STRONG_HURT_F;
+			KnockBack(fTimeDelta);
+			return;
+		}
+
+		m_pMeshCom->Set_AnimationSet(19);
+
 		if (Get_AniRatio() >= 0.89f)
 			m_eCurState = OBJ_GUARD;
+		else
+		{
+			if(Get_AniRatio()<=0.1f)
+			CheckMoveMesh(fTimeDelta, m_vKnockBackDir, false, 10.f);
+		}
 	}
 }
 

@@ -27,45 +27,44 @@ public:
 	virtual HRESULT		Ready_GameObject(void) override;
 	virtual HRESULT		LateReady_GameObject(void) override;
 	virtual _int		Update_GameObject(const _float& fTimeDelta) override;
+	virtual void		Render_GameObject(void) override;
 
-
-	virtual void Render_GameObject(void) override;
 
 public:
-	void		Set_CamTransform(Engine::CTransform** pTransform) { m_pCameraTransformCom=*pTransform; }
-	_float		Get_AniRatio();
-	void		Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage);
-	DWORD		Get_Dodge() { return m_dwDodge_DirectionFlag; }
+	void				Set_CamTransform(Engine::CTransform** pTransform) { m_pCameraTransformCom=*pTransform; }
+	_float				Get_AniRatio();
+	void				Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage);
+	DWORD				Get_Dodge() { return m_dwDodge_DirectionFlag; }
 private:
-	HRESULT		Add_Component(void);
-	void		Key_Input(const _float& fTimeDelta);
-	HRESULT		SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
-	HRESULT		Load_Text(const TCHAR * pFilePath);
-	wchar_t*	CharToWChar(const char* pstrSrc);
-	float		Get_Angle(const D3DXVECTOR3& a, const D3DXVECTOR3& b);
-	void		Check_Direction(_float fTimeDelta);
-	void		StateMachine();
+	HRESULT				Add_Component(void);
+	void				Key_Input(const _float& fTimeDelta);
+	HRESULT				SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
+	HRESULT				Load_Text(const TCHAR * pFilePath);
+	wchar_t*			CharToWChar(const char* pstrSrc);
+	float				Get_Angle(const D3DXVECTOR3& a, const D3DXVECTOR3& b);
+	void				Check_Direction(_float fTimeDelta);
+	void				StateMachine();
 	
-	void		IdleOption();
-	void		CheckMoveMesh(_float fTimeDelta, Engine::CTransform * pTransform, Engine::INFO eDir, _bool bIsDirRvc, _float fSpeed, Engine::INFO eDir2 = Engine::INFO::INFO_END, _bool bIsDir2Rvc = false);
-	void		CheckMoveMesh(_float fTimeDelta,  _vec3 vDir,_bool bIsDirRvc, _float fSpeed);
-	void		AttackMoveSet(_float fTimeDelta);
-	void		StorngAttackMoveSet(_float fTimeDelta);
-	void		ChargeAttackMoveSet(_float fTimeDelta);
-	void		DodgeAttackMoveSet(_float fTimeDelta);
-	void		Guard(_float fTimeDelta);
-	void		Guard_H(_float fTimeDelta);
+	void				IdleOption();
+	void				CheckMoveMesh(_float fTimeDelta, Engine::CTransform * pTransform, Engine::INFO eDir, _bool bIsDirRvc, _float fSpeed, Engine::INFO eDir2 = Engine::INFO::INFO_END, _bool bIsDir2Rvc = false);
+	void				CheckMoveMesh(_float fTimeDelta,  _vec3 vDir,_bool bIsDirRvc, _float fSpeed);
+	void				AttackMoveSet(_float fTimeDelta);
+	void				StorngAttackMoveSet(_float fTimeDelta);
+	void				ChargeAttackMoveSet(_float fTimeDelta);
+	void				DodgeAttackMoveSet(_float fTimeDelta);
+	void				Guard(_float fTimeDelta);
+	void				Guard_H(_float fTimeDelta);
 
-	void		MoveAni(_float fTimeDelta, _float fMinRatio, _float fMaxRatio, _float fSpeed, _vec3 vDir);
-	_float		Get_AngleOnTheLook();
-	void		RotateToLook(_float fTimeDelta);
-	_bool		CheckEnableState();
-	void		Collision_Check(_float fTimeDelta);
+	void				MoveAni(_float fTimeDelta, _float fMinRatio, _float fMaxRatio, _float fSpeed, _vec3 vDir);
+	_float				Get_AngleOnTheLook();
+	void				RotateToLook(_float fTimeDelta);
+	_bool				CheckEnableState();
+	void				Collision_Check(_float fTimeDelta);
 
-	void		KnockBack(_float fTimeDelta);
-	void		SetColliderEnable(_float fMin, _float fMax);
+	void				KnockBack(_float fTimeDelta);
+	void				SetColliderEnable(_float fMin, _float fMax);
 
-	void		UpdateGague(_float fTimeDelta);
+	void				UpdateGague(_float fTimeDelta);
 
 private:
 	_uint					m_uiStageSet;

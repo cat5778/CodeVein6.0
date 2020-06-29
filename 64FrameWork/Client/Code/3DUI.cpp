@@ -21,15 +21,15 @@ HRESULT C3DUI::Ready_GameObject(void)
 	m_vScale.y = m_pTextureCom->Get_ImageInfo().Height*0.001f;
 	m_vScale.z = 0.0000001f;
 	m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
-	
-
 
 	return S_OK;
 }
 
 HRESULT C3DUI::LateReady_GameObject(void)
 {
+
 	m_pTargetTransformCom = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Transform", Engine::ID_DYNAMIC));
+
 
 	return S_OK;
 }

@@ -5,6 +5,7 @@
 BEGIN(Engine)
 class CNaviMesh;
 END
+class CGauge;
 class CRussianHat : public CDynamicObject
 {
 public:
@@ -80,6 +81,7 @@ private:
 	RUSSIANTSTATE				m_ePreState;
 	_bool						m_bIsPhase2 = false;
 	_uint						m_uiFist=0;
+	CGauge*						m_pHPGauge=nullptr;
 private:
 	virtual void			Free(void) override;
 };

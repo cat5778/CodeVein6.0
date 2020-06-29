@@ -1,3 +1,13 @@
+SK_NewCheckPoint_0
+0.01
+0.01
+0.01
+0
+0
+0
+19.3
+0.14
+-0.4
 SM_ASdisplayPillar_A_ba01_0
 0.01
 0.01
@@ -2565,7 +2575,7 @@ SM_RoseWinBase_s_ba01_0
 0
 1.5708
 0
-30.6792
+26.3792
 -6.03598
 -1.09775
 SM_RoseWin_l_ba01_0
