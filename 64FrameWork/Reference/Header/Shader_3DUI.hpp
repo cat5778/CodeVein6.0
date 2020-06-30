@@ -1,6 +1,7 @@
 #include "Shader_Base.hpp"
 
 texture			g_DepthTexture;
+float			g_TextureA;
 
 sampler DepthSampler = sampler_state
 {
@@ -66,7 +67,27 @@ PS_OUT		PS_MAIN(PS_IN In)
 	float	vViewZ = tex2D(DepthSampler, vDepthUV).y * 1000.f;
 
 	Out.vColor.a = Out.vColor.a * saturate(vViewZ - In.vProjPos.w);
+	return Out;
+}
+PS_OUT		PS_MAIN2(PS_IN In)
+{
+	PS_OUT			Out = (PS_OUT)0;
 
+	Out.vColor = tex2D(BaseSampler, In.vTexUV);
+
+	float2		vDepthUV = (float2)0.f;
+
+	// -1 -> 0, 1 -> 1 (투영좌표인 x값이 텍스처 uv로 좌표 변환)
+
+	vDepthUV.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+
+	// 1 -> 0, -1 -> 1(투영좌표인 y값이 텍스처 uv로 좌표 변환)
+	vDepthUV.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+	float	vViewZ = tex2D(DepthSampler, vDepthUV).y * 1000.f;
+
+	Out.vColor.a = Out.vColor.a * saturate(vViewZ - In.vProjPos.w);
+	Out.vColor.a *= g_TextureA;
 	return Out;
 }
 
@@ -82,4 +103,13 @@ technique Default_Device
 		pixelshader = compile ps_3_0 PS_MAIN();
 	}
 
+	pass Blink
+	{
+		alphablendenable = true;
+	srcblend = srcalpha;
+	destblend = invsrcalpha;
+
+	vertexshader = compile vs_3_0 VS_MAIN();
+	pixelshader = compile ps_3_0 PS_MAIN2();
+	}
 };

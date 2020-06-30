@@ -151,6 +151,9 @@
     <Filter Include="02. GameObejct\02. Public\05. UI\3DUI\LockOn">
       <UniqueIdentifier>{00557c36-699d-4114-bfa1-86978bcf909f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObejct\02. Public\05. UI\3DUI\Button">
+      <UniqueIdentifier>{6574cd52-d659-4767-af14-46b1e46017d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -273,6 +276,9 @@
     <ClInclude Include="..\Code\LockOn.h">
       <Filter>02. GameObejct\02. Public\05. UI\3DUI\LockOn</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\3DButton.h">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Button</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -391,6 +397,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\LockOn.cpp">
       <Filter>02. GameObejct\02. Public\05. UI\3DUI\LockOn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\3DButton.cpp">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

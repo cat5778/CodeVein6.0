@@ -7,6 +7,7 @@
 #include "Shield.h"
 #include "RedDevil.h"
 #include "Halberd.h"
+#include "CocoonDevil.h"
 CField::CField(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
 {
@@ -138,7 +139,6 @@ HRESULT CField::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	case LOAD_NOMAL3:
 		Load_Text(L"../../Resource/Data/Base.txt");
 		break;
-
 	case LOAD_PLAYER:
 		break;
 	case LOAD_MONSTER:

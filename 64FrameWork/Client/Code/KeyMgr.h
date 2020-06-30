@@ -34,6 +34,8 @@ const DWORD KEY_U		= 0x04000000;
 const DWORD KEY_O		= 0x08000000;
 const DWORD KEY_SHIFT	= 0x10000000;
 const DWORD KEY_ALT		= 0x20000000;
+const DWORD KEY_X		= 0x40000000;
+
 
 class  CKeyMgr : public CBase
 {

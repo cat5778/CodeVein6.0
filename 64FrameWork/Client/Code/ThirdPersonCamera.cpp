@@ -37,7 +37,6 @@ HRESULT CThirdPersonCamera::Ready_GameObject(const _vec3 * pEye, const _vec3 * p
 
 HRESULT CThirdPersonCamera::LateReady_GameObject(void)
 {
-
 	if (m_ppGameObjectMap == nullptr)
 		m_ppGameObjectMap = &Engine::Get_Layer(L"GameLogic")->Get_ObjectMap();
 	m_pLockOn = dynamic_cast<CLockOn*>(Engine::Get_GameObject(L"UI", L"LockOnUI"));
@@ -71,7 +70,10 @@ HRESULT CThirdPersonCamera::Ready_Component()
 
 	return S_OK;
 }
-
+//_vec3 Get_CamPos();
+//{
+//	return m_
+//}
 void CThirdPersonCamera::Key_Input(const _float& fTimeDelta)
 {
 
@@ -163,7 +165,6 @@ void CThirdPersonCamera::Target_Renewal(const _float& fTimeDelta)
 		}
 		_vec3	vLook = *m_pTransformCom->Get_Info(Engine::INFO_LOOK);
 		D3DXVec3Normalize(&vLook, &vLook);
-		//m_pTransformCom->Rotation(Engine::ROT_Y, D3DXToRadian());
 
 		if (m_pMonTransform != nullptr)
 		{

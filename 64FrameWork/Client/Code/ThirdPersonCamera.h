@@ -35,6 +35,9 @@ public:
 	_vec3							Get_LockOnLook() { return m_vAt - m_vHeadPos; }
 	_bool							Is_Lock() { return m_bIsLockOn; }
 	const Engine::CTransform*		Get_MonTransform() { return m_pMonTransform; }
+	_vec3							Get_Look() {return m_vAt-m_vEye; }
+	_vec3							Get_CamPos() { return m_vEye; }
+
 
 private:
 	void							Key_Input(const _float& fTimeDelta);
@@ -42,7 +45,9 @@ private:
 	void							Mouse_Move(const _float& fTimeDelta);
 	void							Lerp_Cam(_float fTimeDelta);
 	void							Mouse_Fix(void);
-	float							Get_Angle(const D3DXVECTOR3& a, const D3DXVECTOR3& b);
+	_float							Get_Angle(const D3DXVECTOR3& a, const D3DXVECTOR3& b);
+
+
 private:
 	_bool					m_bIsLockOn = false;
 	Engine::CTransform*		m_pTargetInfo = nullptr;

@@ -7,7 +7,7 @@
 #include "DynamicObject.h"
 #include "LockOn.h"
 #include "3DUI.h"
-
+#include "3DButton.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
 {
@@ -92,11 +92,11 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	Engine::CLayer* pLayer = Engine::Get_Layer(L"UI");
 
 
-	pGameObject = m_pHPGaugeBar = CGauge::Create(m_pGraphicDev, L"Texture_HPGaugeBar", _vec3(20.f,80.f,0.1f), PIVOT_LT);
+	pGameObject = m_pHPGaugeBar = CGauge::Create(m_pGraphicDev, L"Texture_HPGaugeBar", _vec3(20.f, 80.f, 0.1f), PIVOT_LT);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_HPBar", pGameObject), E_FAIL);
 
-	pGameObject = m_pHPGauge = CGauge::Create(m_pGraphicDev,L"Texture_HPGauge", _vec3(26.f, 86.f, 0.09f), PIVOT_LT,_vec3(0.05f,0.f,1.0f));
+	pGameObject = m_pHPGauge = CGauge::Create(m_pGraphicDev, L"Texture_HPGauge", _vec3(26.f, 86.f, 0.09f), PIVOT_LT, _vec3(0.05f, 0.f, 1.0f));
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_HPGauge", pGameObject), E_FAIL);
 
@@ -104,7 +104,7 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_SPBar", pGameObject), E_FAIL);
 
-	pGameObject = m_pSPGauge = CGauge::Create(m_pGraphicDev, L"Texture_StaminaGauge", _vec3(26.f,136.f, 0.09f), PIVOT_LT, _vec3(0.05f, 0.f, 1.0f));
+	pGameObject = m_pSPGauge = CGauge::Create(m_pGraphicDev, L"Texture_StaminaGauge", _vec3(26.f, 136.f, 0.09f), PIVOT_LT, _vec3(0.05f, 0.f, 1.0f));
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_SPGauge", pGameObject), E_FAIL);
 
@@ -112,18 +112,29 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LockOnUI", pGameObject), E_FAIL);
 
-
-	pGameObject = C3DUI::Create(m_pGraphicDev, L"BossHPBar");
+	pGameObject = m_pShopSub = C3DUI::Create(m_pGraphicDev, L"ShopUI",2.f,40.f,true,UI_SHOP_SUB);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"3DUI", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopUI", pGameObject), E_FAIL);
+
+	pGameObject = m_pShoplist = C3DUI::Create(m_pGraphicDev, L"ShopUI2", 2.f, -40.f,false, UI_SHOP);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopUI2", pGameObject), E_FAIL);
+
+	//pGameObject  = C3DButton::Create(m_pGraphicDev, L"Select", 1.9f, 40.f);
+	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Shop_Sub_Select", pGameObject), E_FAIL);
+
+
 
 	return S_OK;
 }
 
 _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 {
-
-
+	if (m_pKeyMgr->KeyDown(KEY_X))
+	{
+		m_pShopSub->ChangeEnable();
+	}
 	UpdateGague(fTimeDelta);
 
 	m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_ATTACK, false);
@@ -460,7 +471,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	}
 	if (Engine::Get_DIKeyState(DIK_RETURN) & 0x80)
 	{
-		m_pMeshCom->Set_AnimationSet(0);
+		m_pMeshCom->Set_AnimationSet(8);
 	}
 
 
@@ -797,7 +808,7 @@ void CPlayer::StateMachine()
 		case OBJ_IDLE:
 		{
 			m_fAnimSpeed = 1.0f;
-			m_fRotSpeed = 6.f;
+			m_fRotSpeed = 4.f;
 			m_pMeshCom->Set_AnimationSet(48);
 		}
 			break;
@@ -1545,12 +1556,14 @@ void CPlayer::UpdateGague(_float fTimeDelta)
 
 
 	if (m_fMaxSP > m_fCurSP)
-		m_fCurSP+=fTimeDelta*5.f;
+		m_fCurSP += fTimeDelta*5.f;
 	else
 		m_fCurSP = m_fMaxSP;
-
-	m_pHPGauge->Set_GaugeRatio(m_fCurHP / m_fMaxHP);
-	m_pSPGauge->Set_GaugeRatio(m_fCurSP / m_fMaxSP);
+	if (m_pHPGauge!=nullptr&&m_pSPGauge != nullptr)
+	{
+		m_pHPGauge->Set_GaugeRatio(m_fCurHP / m_fMaxHP);
+		m_pSPGauge->Set_GaugeRatio(m_fCurSP / m_fMaxSP);
+	}
 }
 
 

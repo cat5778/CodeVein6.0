@@ -17,6 +17,8 @@ class CShader;
 class CColliderGroup;
 END
 class CThirdPersonCamera;
+class CKeyMgr;
+class C3DUI;
 class CPlayer : public Engine::CGameObject
 {
 private:
@@ -113,6 +115,12 @@ private:
 	CGauge*					m_pHPGaugeBar = nullptr;
 	CGauge*					m_pSPGauge = nullptr;
 	CGauge*					m_pSPGaugeBar = nullptr;
+	C3DUI*					m_pShoplist = nullptr;
+	C3DUI*					m_pShopSub = nullptr;
+
+	C3DUI*					m_pInven = nullptr;
+	C3DUI*					m_pInvenSub= nullptr;
+
 
 public:
 	static CPlayer*		Create(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx=0, _uint uiStageIdx = 0);

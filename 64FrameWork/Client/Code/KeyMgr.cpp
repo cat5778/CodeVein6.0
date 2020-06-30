@@ -69,6 +69,8 @@ void CKeyMgr::Update()
 		m_dwCurKey |= KEY_J;
 	if (GetAsyncKeyState('K') & 0x8000)
 		m_dwCurKey |= KEY_K;
+	if (GetAsyncKeyState('X') & 0x8000)
+		m_dwCurKey |= KEY_X;
 	if (GetAsyncKeyState('U') & 0x8000)
 		m_dwCurKey |= KEY_U;
 	if (GetAsyncKeyState('O') & 0x8000)

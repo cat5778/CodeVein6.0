@@ -39,10 +39,9 @@ _int CSkySphere::Update_GameObject(const _float& fTimeDelta)
 	
 	//еб╬Г
 	_matrix matLightX, matLightY, matLightZ, matLight;
-	D3DXMatrixRotationX(&matLightX, D3DXToRadian(23.5f));
+	//D3DXMatrixRotationX(&matLightX, D3DXToRadian(23.5f));
 	D3DXMatrixRotationY(&matLightY, D3DXToRadian(m_fRot));
-	//D3DXMatrixRotationZ(&matLightZ, D3DXToRadian(0.f));
-	matLight =matLightX*matLightY;
+	matLight =/*matLightX**/matLightY;
 	_vec3 vLightPos = { 4.f, 1.f, 0.f };
 	D3DXVec3TransformNormal(&vLightPos, &vLightPos, &matLight);
 	_vec3 vPos = vLightPos*m_fLength;

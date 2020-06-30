@@ -25,7 +25,7 @@ private:
 public:
 	void			Set_MaxAlpha(_float fMaxAlpha);
 	void			Set_GaugeRatio(_float fRatio);
-	void			Blink_Image(_float fTimeDelta,_float fSpeed, _float fStartTime);
+	void			Blink_Image(_float fTimeDelta, _float fSpeed, _float fStartTime);
 	void			LerpGague(_float fTimeDelata);
 
 private:

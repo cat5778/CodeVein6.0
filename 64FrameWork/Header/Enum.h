@@ -185,6 +185,23 @@ enum PIVOT
 	PIVOT_LB,
 	PIVOT_END
 };
+enum RBUTTONSTATE
+{
+	RB_MENU_1,
+	RB_MENU_2,
+	RB_MENU_3,
+	RB_MENU_END,
+};
+enum UISTATE
+{
+	UI_SHOP,
+	UI_INVEN,
+	UI_PORTAL,
+	UI_SHOP_SUB,
+	UI_INVEN_SUB,
+	UI_PORTAL_SUB,
+	UI_END
+};
 
 
 #endif // Enum_h__

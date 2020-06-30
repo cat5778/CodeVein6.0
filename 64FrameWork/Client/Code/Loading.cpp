@@ -318,6 +318,47 @@ _bool CLoading::Loading_Basic()
 		L"../../Resource/Texture/Gauge/BossHPBar.tga"),
 		E_FAIL);
 
+
+	//UI
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"EmptyFrame",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/UIFrame/EmptyFrame.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"ShopUI2",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/UIFrame/ShopUI2.tga"),
+		E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"InvenFrame",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/UIFrame/InvenFrame.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"PortalUI",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/UIFrame/Portal.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"ShopUI",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/UIFrame/ShopUI.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"Select",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/UIFrame/Select.tga"),
+		E_FAIL);
+
+
 	FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
 		RESOURCE_STAGE,
 		L"SM_Sky_ba01",

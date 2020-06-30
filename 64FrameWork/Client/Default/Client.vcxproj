@@ -173,6 +173,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Code\3DButton.h" />
     <ClInclude Include="..\Code\3DUI.h" />
     <ClInclude Include="..\Code\BackGround.h" />
     <ClInclude Include="..\Code\CocoonDevil.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Code\3DButton.cpp" />
     <ClCompile Include="..\Code\3DUI.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\CocoonDevil.cpp" />
