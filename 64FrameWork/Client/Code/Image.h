@@ -29,6 +29,7 @@ public:
 	void			LerpGague(_float fTimeDelata);
 
 private:
+	_float			m_fTime = 0.f;
 	_float			m_fSin = 0.f;
 	_float			m_fFilter = 0.0f;
 	_float			m_fAlphaSpd = 0.f;

@@ -93,8 +93,8 @@ PS_OUT		PS_MAIN(PS_IN In)
 	Out.vColor.a = Out.vColor.a * saturate(vViewZ - In.vProjPos.w);
 	Out.vColor.a *= g_TextureA;
 
-	if ((Out.vColor.r + Out.vColor.g + Out.vColor.b) < g_TextureFilterVal)
-		Out.vColor.a = 0.f;
+	//if ((Out.vColor.r + Out.vColor.g + Out.vColor.b) < g_TextureFilterVal)
+	//	Out.vColor.a = 0.f;
 
 	return Out;
 

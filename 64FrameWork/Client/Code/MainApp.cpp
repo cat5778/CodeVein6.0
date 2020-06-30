@@ -23,6 +23,10 @@ HRESULT CMainApp::Ready_MainApp(void)
 	Ready_Managers();
 	m_pSoundMgr->Initialize();
 
+
+	CSoundMgr::GetInstance()->PlayBGM(L"Code.mp3");
+	CSoundMgr::GetInstance()->SetVolume(CSoundMgr::BGM, 1.f);
+
 	return S_OK;
 }
 
@@ -59,7 +63,7 @@ void CMainApp::Render_MainApp(void)
 	//m_pGraphicDev->SetRenderState(D3DRS_ZENABLE, TRUE);			// Z버퍼에 저장은 하되, 자동 정렬을 수행 할지 말지를 판단하는 옵션
 	//m_pGraphicDev->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);	// Z버퍼에 픽셀들의 깊이 값을 저장 할지 말지를 판단하는 옵션
 
-	Engine::Render_Begin(D3DXCOLOR(0.f, 0.f, 1.f, 1.f));
+	Engine::Render_Begin(D3DXCOLOR(0.f, 0.f, 0.f, 1.f));
 	
 	if (nullptr != m_pManagement)
 		m_pManagement->Render_Scene(m_pGraphicDev);

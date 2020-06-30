@@ -25,7 +25,7 @@ HRESULT CImage::Ready_GameObject(void)
 
 	m_pTransformCom->Set_Scale((WINCX / m_fConvertSizeX), (WINCY / m_fConvertSizeY), 1.0f);
 	ConvertPivotPos();
-
+	m_vUBA.z = 0.f;
 	return S_OK;
 }
 
@@ -37,10 +37,16 @@ HRESULT CImage::LateReady_GameObject(void)
 
 _int CImage::Update_GameObject(const _float& fTimeDelta)
 {
+	m_fTime += fTimeDelta;
 	LerpGague(fTimeDelta);
+	if (m_fTime >= 4.f)
+	{
+		Blink_Image(fTimeDelta, 300.f, 0.f);
+		if (m_wstrTexName.find(L"TitleWallpaper_UI") != wstring::npos)
+			m_vUBA.z = 1.f;
+	}
 
-	Blink_Image(fTimeDelta, 300.f, 0.f);
-	
+
 	CUI::Update_GameObject(fTimeDelta);
 
 	return 0;
