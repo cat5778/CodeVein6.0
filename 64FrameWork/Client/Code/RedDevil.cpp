@@ -215,10 +215,13 @@ void CRedDevil::StateMachine()
 		switch (m_eCurState)
 		{
 		case RED_Death_F:
+			m_fAnimSpeed = 2.0f;
 			m_pMeshCom->Set_AnimationSet(31);
 			m_uiAni = 31;
 			break;
 		case RED_Death_B:
+			m_fAnimSpeed = 2.0f;
+
 			m_uiAni = 32;
 			m_pMeshCom->Set_AnimationSet(32);
 			break;

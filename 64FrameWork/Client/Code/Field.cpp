@@ -7,6 +7,7 @@
 #include "Shield.h"
 #include "RedDevil.h"
 #include "Halberd.h"
+#include "SkySphere.h"
 #include "CocoonDevil.h"
 CField::CField(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CScene(pGraphicDev)
@@ -56,6 +57,13 @@ HRESULT CField::LateReady_Scene(void)
 _int CField::Update_Scene(const _float& fTimeDelta)
 {
 	m_fTime += fTimeDelta;
+
+
+	Engine::Get_Light(0)->Range = 1100;
+	Engine::Get_Light(0)->Diffuse=D3DXCOLOR(0.8f, 0.8f, 1.0f, 0.35f);// ´«¸Ê
+
+
+
 
 	_int iEvent=Engine::CScene::Update_Scene(fTimeDelta);
 
@@ -126,6 +134,11 @@ HRESULT CField::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Shield", pGameObject), E_FAIL);
 
 
+	pGameObject = CSkySphere::Create(m_pGraphicDev, 1);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"SkySphere", pGameObject), E_FAIL);
+
+
 	m_ppGameObjectMap = &pLayer->Get_ObjectMap();
 
 	switch ((LOADMODE)m_uiStageIdx)
@@ -157,13 +170,28 @@ HRESULT CField::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
 
-	//pGameObject = CRedDevil::Create(m_pGraphicDev, L"RedDevil", 1, _vec3(-43.8f, 2.66f, 42.94f), 39);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+	pGameObject = CRedDevil::Create(m_pGraphicDev, L"RedDevil", 1, _vec3(-43.8f, 2.66f, 42.94f), 39);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
 
-	//pGameObject = CHalberd::Create(m_pGraphicDev, 1);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+	pGameObject = CHalberd::Create(m_pGraphicDev, 1);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+
+
+	pGameObject = CRedDevil::Create(m_pGraphicDev, L"RedDevil", 2, _vec3(-1.8f,0.0826f,15.9f), 47);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+
+	pGameObject = CHalberd::Create(m_pGraphicDev, 2);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+
+
+	pGameObject = CCocoonDevil::Create(m_pGraphicDev, L"CocoonDevil", 0, _vec3(-15.36f, 0.9416f, -7.8253), 65);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(pGameObject->Get_InstName().c_str(), pGameObject), E_FAIL);
+
 
 
 

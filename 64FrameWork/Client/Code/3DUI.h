@@ -31,13 +31,18 @@ public:
 
 public:
 	void		ChangeEnable();
+	void		ChangeEnable(_bool bIsEnable);
 	void		InteractionUI();
+	_bool		IsOn() { return m_bIsOn; }
+	wstring		Get_ItemName();
 private:
 	HRESULT		Add_Component(void);
 	HRESULT		SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 	void		BillBoard();
-
+	void		TestPos();
+	void		InsertSlot();
 private:
+
 	Engine::CRcTex*			m_pBufferCom = nullptr;
 	Engine::CTexture*		m_pTextureCom = nullptr;
 	Engine::CTransform*		m_pTransformCom = nullptr;
@@ -55,8 +60,8 @@ private:
 	_bool					m_bIsRight = true;
 	UISTATE					m_eUIState;
 	C3DButton*				m_pButton= nullptr;
-
 	_bool					m_bIsOn = false;
+	wstring					m_wstrItem;
 
 public:
 	static C3DUI*		Create(LPDIRECT3DDEVICE9 pGraphicDev,  wstring wstrTexName, _float fLength,_float fRotY,_bool bIsRight =true, UISTATE eUIState=UI_END);

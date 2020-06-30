@@ -31,7 +31,6 @@ HRESULT C3DButton::LateReady_GameObject(void)
 {
 
 	m_pCam=dynamic_cast<CThirdPersonCamera*>(Engine::Get_GameObject(L"UI", L"ThirdPersonCamera"));
-	//m_pTargetTransformCom = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"UI", L"ThirdPersonCamera", L"Com_Transform", Engine::ID_DYNAMIC));
 
 	return S_OK;
 }
@@ -40,9 +39,9 @@ _int C3DButton::Update_GameObject(const _float& fTimeDelta)
 {
 	if (!m_bIsOn)
 		return 0;
+	
+	SelectMode();
 	ButtonMoveSet();
-	
-	
 	Blink_Image(fTimeDelta, 100.f);
 
 	Engine::CGameObject::Update_GameObject(fTimeDelta);	
@@ -50,6 +49,7 @@ _int C3DButton::Update_GameObject(const _float& fTimeDelta)
 	m_pRendererCom->Add_RenderGroup(Engine::RENDER_ALPHA, this);
 
 
+	//TestPos();
 
 
 	return 0;
@@ -142,9 +142,9 @@ void C3DButton::BillBoard()
 	m_bIsRight ? vDir = vRight*0.3f + vLook : vDir = vRight*-0.3f + vLook;
 	D3DXVec3Normalize(&vDir, &vDir);
 
-	_vec3 vTargetPos = m_pCam->Get_CamPos() + (vDir*m_fLength);
+	_vec3 vTargetPos = m_pCam->Get_CamPos() + (vDir*m_fLength) + m_vConvertPos;
 	m_pTransformCom->Set_Pos(vTargetPos.x, vTargetPos.y + m_vPos.y, vTargetPos.z);
-
+	
 	_matrix	matWorld, matView, matBill;
 
 	m_pTransformCom->Get_WorldMatrix(&matWorld);
@@ -163,6 +163,10 @@ void C3DButton::BillBoard()
 	_matrix matY;
 	D3DXMatrixRotationY(&matY, D3DXToRadian(m_fRotY));
 	m_pTransformCom->Set_WorldMatrix(&(matBill*matY * matWorld));
+	
+	D3DXVec3TransformNormal(&m_vConvertPos, &_vec3{ 1.0f,0.f,0.f }, m_pTransformCom->Get_WorldMatrixPointer());
+	m_vConvertPos *=m_vPos.x;
+
 
 	Engine::CGameObject::Compute_ViewZ(&m_pTransformCom->m_vInfo[Engine::INFO_POS]);
 
@@ -189,6 +193,45 @@ void C3DButton::Set_ButtonPos()
 	switch (m_eUIState)
 	{
 	case UI_SHOP:
+	{
+		switch (m_uiButtonIdx)
+		{
+		case LB_MENU_1:
+			m_bIsSelectParent ? m_vPos.x = -1.33f : m_vPos.x = -1.32f;
+			m_bIsSelectParent ? m_vPos.y = 0.35f : m_vPos.y = 0.23f;
+			m_wstrItem = L"왕의 대검";
+			break;
+		case LB_MENU_2:
+			m_bIsSelectParent ? m_vPos.x = -0.05f : m_vPos.x = -0.05f;
+			m_bIsSelectParent ? m_vPos.y = 0.35f : m_vPos.y = 0.23f;
+			m_wstrItem = L"기사의 대검";
+
+			break;
+		case LB_MENU_3:
+			m_bIsSelectParent ? m_vPos.x = 1.28f : m_vPos.x = 1.24f;
+			m_bIsSelectParent ? m_vPos.y = 0.35f : m_vPos.y = 0.23f;
+			m_wstrItem = L"병사의 할버드";
+			break;
+		case LB_MENU_4:
+			m_bIsSelectParent ? m_vPos.x = -1.33f : m_vPos.x = -1.32f;
+			m_bIsSelectParent ? m_vPos.y = -0.22f : m_vPos.y = -0.15f;
+
+			break;
+		case LB_MENU_5:
+			m_bIsSelectParent ? m_vPos.x = -0.05f : m_vPos.x = -0.05f;
+			m_bIsSelectParent ? m_vPos.y = -0.22f : m_vPos.y = -0.15f;
+
+			break;
+		case LB_MENU_6:
+			m_bIsSelectParent ? m_vPos.x = 1.28f : m_vPos.x = 1.24f;
+			m_bIsSelectParent ? m_vPos.y = -0.22f : m_vPos.y = -0.15f;
+
+			break;
+		default:
+			m_uiButtonIdx = 0;
+			break;
+		}
+	}
 		break;
 	case UI_INVEN:
 		break;
@@ -199,13 +242,14 @@ void C3DButton::Set_ButtonPos()
 		switch (m_uiButtonIdx)
 		{
 		case RB_MENU_1:
-			m_vPos.y = 0.19f;
+			m_bIsSelectParent ? m_vPos.y = 0.28f : m_vPos.y = 0.19f;
 			break;
 		case RB_MENU_2:
-			m_vPos.y = 0.08f;
+			m_bIsSelectParent ? m_vPos.y = 0.11f : m_vPos.y = 0.08f;
+
 			break;
 		case RB_MENU_3:
-			m_vPos.y = -0.04f;
+			m_bIsSelectParent ? m_vPos.y = -0.05f : m_vPos.y = -0.04f;
 			break;
 		}
 	}	
@@ -222,64 +266,128 @@ void C3DButton::Set_ButtonPos()
 
 
 
-	switch (m_uiButtonIdx)
-	{
-	case RB_MENU_1:
-		m_vPos.y = 0.19f;
-		break;
-	case RB_MENU_2:
-		m_vPos.y = 0.08f;
-		break;
-	case RB_MENU_3:
-		m_vPos.y = -0.04f;
-		break;
-	case RB_MENU_END:
+	//switch (m_uiButtonIdx)
+	//{
+	//case RB_MENU_1:
+	//	m_vPos.y = 0.19f;
+	//	break;
+	//case RB_MENU_2:
+	//	m_vPos.y = 0.08f;
+	//	break;
+	//case RB_MENU_3:
+	//	m_vPos.y = -0.04f;
+	//	break;
+	//case RB_MENU_END:
 
-		break;
+	//	break;
 
-	default:
-		break;
-	}
+	//default:
+	//	break;
+	//}
 }
 
 void C3DButton::ButtonMoveSet()
 {
-
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_DOWN))
+	if (m_eUIState >= UI_SHOP_SUB)
 	{
-		if (m_uiButtonIdx > RB_MENU_3)
-			m_uiButtonIdx = RB_MENU_3;
-		else
-			m_uiButtonIdx++;
-	}
-	else if (CKeyMgr::GetInstance()->KeyDown(KEY_UP))
-	{
-		if (m_uiButtonIdx < RB_MENU_1)
-			m_uiButtonIdx = RB_MENU_1;
-		else
-			m_uiButtonIdx--;
+		if (CKeyMgr::GetInstance()->KeyDown(KEY_DOWN))
+		{
+			if (m_uiButtonIdx > RB_MENU_3)
+				m_uiButtonIdx = RB_MENU_3;
+			else
+				m_uiButtonIdx++;
+		}
+		else if (CKeyMgr::GetInstance()->KeyDown(KEY_UP))
+		{
+			if (m_uiButtonIdx < RB_MENU_1)
+				m_uiButtonIdx = RB_MENU_1;
+			else
+				m_uiButtonIdx--;
 
+		}
 	}
+	else
+	{
+		if (CKeyMgr::GetInstance()->KeyDown(KEY_RIGHT))
+		{
+			if (m_uiButtonIdx > LB_MENU_7)
+				m_uiButtonIdx = LB_MENU_7;
+			else
+				m_uiButtonIdx++;
+		}
+		else if (CKeyMgr::GetInstance()->KeyDown(KEY_LEFT))
+		{
+			if (m_uiButtonIdx < LB_MENU_1)
+				m_uiButtonIdx = LB_MENU_1;
+			else
+				m_uiButtonIdx--;
+
+		}
+	}
+
 	Set_ButtonPos();
 
-	if (CKeyMgr::GetInstance()->KeyPressing(KEY_J))
-	{
-		m_vPos.y = 0.f;
-		cout << m_vPos.y << endl;
-	}
 
+
+}
+
+void C3DButton::Set_SelectParent(_bool bIsParent)
+{
+	m_bIsSelectParent = bIsParent;
 }
 
 void C3DButton::SelectMode()
 {
-	m_bIsSelect != m_bIsSelect;
-
-	if (m_bIsSelect)
-		m_pTransformCom->Set_Scale(m_vScale.x*0.5f, m_vScale.y*0.5f, m_vScale.z*0.5f);
+	if (m_wstrTexName.find(L'2') == wstring::npos)
+	{
+		if (m_bIsSelectParent)
+			m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
+		else
+			m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+	}
 	else
-		m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+	{
+		if (m_bIsSelectParent)
+			m_pTransformCom->Set_Scale(m_vScale.x*0.75f, m_vScale.y*0.75f, m_vScale.z*0.75f);
+		else
+			m_pTransformCom->Set_Scale(m_vScale.x*0.5f, m_vScale.y*0.5f, m_vScale.z*0.5f);
+
+	}
 
 }
+
+void C3DButton::TestPos()
+{
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_LEFT))
+	{
+		m_vPos.x -= 0.01f;
+		cout << m_vPos.x << endl;
+	}
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_RIGHT))
+	{
+		m_vPos.x += 0.01f;
+		cout << m_vPos.x << endl;
+
+	}
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_UP))
+	{
+		m_vPos.y += 0.01f;
+		cout << m_vPos.y << endl;
+
+	}
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_DOWN))
+	{
+		m_vPos.y -= 0.01f;
+		cout << m_vPos.y << endl;
+
+	}
+}
+
+_uint C3DButton::Get_ButtonIdx()
+{
+	return m_uiButtonIdx;
+}
+
 
 C3DButton* C3DButton::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsLeft, UISTATE eUIState)
 {

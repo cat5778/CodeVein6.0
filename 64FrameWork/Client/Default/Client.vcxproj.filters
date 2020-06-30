@@ -154,6 +154,9 @@
     <Filter Include="02. GameObejct\02. Public\05. UI\3DUI\Button">
       <UniqueIdentifier>{6574cd52-d659-4767-af14-46b1e46017d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObejct\02. Public\05. UI\02. Icon">
+      <UniqueIdentifier>{633e1919-80f4-4c0c-bd2a-77c428642b1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">

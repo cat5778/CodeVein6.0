@@ -29,7 +29,7 @@ private:
 private://Pattern
 	void					Battle_Start(_float fTimeDelta);
 	void					Pattern(_float fTimeDelta);
-
+	void					UpdateGague(_float fTimeDelta);
 	void					Chaing_Target(_float fTimeDelta);
 	//Phase1
 	void					Phase1(_float fTimeDelta);

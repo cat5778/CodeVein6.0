@@ -3,7 +3,8 @@
 #include "3DButton.h"
 #include "Export_Function.h"
 #include "ThirdPersonCamera.h"
-
+#include "Player.h"
+#include "Image.h"
 C3DUI::C3DUI(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight ,UISTATE eUIState)
 	: Engine::CGameObject(pGraphicDev),m_wstrTexName(wstrTexName),m_fLength(fLength),m_fRotY(fRotY), m_bIsRight(bIsRight),m_eUIState(eUIState)
 {
@@ -34,20 +35,61 @@ HRESULT C3DUI::LateReady_GameObject(void)
 	if (m_eUIState >= UI_SHOP_SUB)
 	{
 		CGameObject* pGameObject=nullptr;
-		pGameObject = m_pButton = C3DButton::Create(m_pGraphicDev, L"Select", 1.9f, 40.f, m_bIsRight,m_eUIState);
+		pGameObject = m_pButton = C3DButton::Create(m_pGraphicDev, L"Select", m_fLength-0.1f, m_fRotY, m_bIsRight,m_eUIState);
 		wstring wstrButton = m_wstrTexName + L"_BT";
 		Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
 
 	}
-
+	else if(m_eUIState<=UI_INVEN)
+	{
+		CGameObject* pGameObject = nullptr;
+		pGameObject = m_pButton = C3DButton::Create(m_pGraphicDev, L"Select2", m_fLength-0.1f, m_fRotY, m_bIsRight, m_eUIState);
+		wstring wstrButton = m_wstrTexName + L"_BT2";
+		Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
+	}
 	return S_OK;
 }
 
 _int C3DUI::Update_GameObject(const _float& fTimeDelta)
 {
-
 	if (!m_bIsOn)
 		return 0;
+
+	if (m_eUIState<UI_SHOP_SUB)
+	{
+		if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
+		{
+			m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
+			m_pButton->Set_SelectParent(true);
+
+
+		}
+		else
+		{
+			if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
+			{
+				m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+				m_pButton->Set_SelectParent(false);
+			}
+		}
+	}
+	else
+	{
+		if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
+		{
+			m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+			m_pButton->Set_SelectParent(false);
+		}
+		else
+		{
+			if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
+			{
+				m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
+				m_pButton->Set_SelectParent(true);
+
+			}
+		}
+	}
 
 
 
@@ -176,16 +218,121 @@ void C3DUI::BillBoard()
 
 }
 
+void C3DUI::TestPos()
+{
+
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_LEFT))
+	{
+		
+	}
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_RIGHT))
+	{
+
+	}
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_UP))
+	{
+
+	}
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_DOWN))
+	{
+
+	}
+
+}
+
+void C3DUI::InsertSlot()
+{
+	vector<pair<wstring, _uint>>	 InvenMap = dynamic_cast<CPlayer*>(Engine::Get_GameObject(L"GameLogic", L"Player"))->Get_InvenVec();
+	//for (auto Item : InvenMap)
+	//{
+	//	if (Item.first.find(L"왕의 대검") != wstring::npos)
+	//	{
+	//		//CImage::Create(m_pGraphicDev, Halberd_B)
+	//	}
+	//}
+}
+
+
 void C3DUI::ChangeEnable()
 {
 	m_bIsOn = !m_bIsOn;
-	m_pButton->ChangeEnable(m_bIsOn);
+	if(m_pButton!=nullptr)
+		m_pButton->ChangeEnable(m_bIsOn);
 
+
+}
+
+void C3DUI::ChangeEnable(_bool bIsEnable)
+{
+	m_bIsOn = bIsEnable;
+	if (m_pButton != nullptr)
+		m_pButton->ChangeEnable(m_bIsOn);
 
 }
 
 void C3DUI::InteractionUI()
 {
+}
+
+wstring C3DUI::Get_ItemName()
+{
+	wstring wstrItem;
+	switch (m_eUIState)
+	{
+	case UI_SHOP:
+	{
+		switch (m_pButton->Get_ButtonIdx())
+		{
+		case 0:
+			wstrItem = L"왕의대검";
+			break;
+		case 1:
+			wstrItem = L"기사의대검";
+			break;
+		case 2:
+			wstrItem = L"병사의할버드";
+			break;
+		default:
+			wstrItem = L"";
+			break;
+		} 
+
+	}
+		break;
+	case UI_INVEN:
+		break;
+	case UI_PORTAL:
+		break;
+	case UI_SHOP_SUB:
+	{
+		switch (m_pButton->Get_ButtonIdx())
+		{
+		case 0:
+			wstrItem = L"구매";
+			break;
+		case 1:
+			wstrItem = L"판매";
+			break;
+		case 2:
+			wstrItem = L"강화";
+			break;
+		default:
+			wstrItem = L"";
+			break;
+		}
+	}
+	break;
+	case UI_INVEN_SUB:
+		break;
+	case UI_PORTAL_SUB:
+		break;
+	case UI_END:
+		break;
+	default:
+		break;
+	}
+
+	return wstrItem;
 }
 
 C3DUI* C3DUI::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsLeft, UISTATE eUIState)

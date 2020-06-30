@@ -332,6 +332,12 @@ _bool CLoading::Loading_Basic()
 		Engine::TEX_NORMAL,
 		L"../../Resource/Texture/UIFrame/ShopUI2.tga"),
 		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"ShopUI3",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/UIFrame/ShopUI3.tga"),
+		E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,
@@ -357,7 +363,31 @@ _bool CLoading::Loading_Basic()
 		Engine::TEX_NORMAL,
 		L"../../Resource/Texture/UIFrame/Select.tga"),
 		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"Select2",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/WeaponIcon/T_Radar_WidgetFrame.tga"),
+		E_FAIL);
 
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"LargeSword_H",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/WeaponIcon/T_WeaponIcon_LargeSword_H.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"LargeSword_I",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/WeaponIcon/T_WeaponIcon_LargeSword_I.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"Halberd_B",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/WeaponIcon/T_WeaponIcon_WeaponHalberd_B.tga"),
+		E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
 		RESOURCE_STAGE,

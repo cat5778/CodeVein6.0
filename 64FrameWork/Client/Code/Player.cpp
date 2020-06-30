@@ -116,14 +116,14 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopUI", pGameObject), E_FAIL);
 
-	pGameObject = m_pShoplist = C3DUI::Create(m_pGraphicDev, L"ShopUI2", 2.f, -40.f,false, UI_SHOP);
+	pGameObject = m_pShoplist = C3DUI::Create(m_pGraphicDev, L"ShopUI3", 2.f, -40.f,false, UI_SHOP);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopUI2", pGameObject), E_FAIL);
-
-	//pGameObject  = C3DButton::Create(m_pGraphicDev, L"Select", 1.9f, 40.f);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Shop_Sub_Select", pGameObject), E_FAIL);
-
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopUI3", pGameObject), E_FAIL);
+/*
+	pGameObject  = C3DButton::Create(m_pGraphicDev, L"Select", 1.9f, 40.f);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Shop_Sub_Select", pGameObject), E_FAIL);
+*/
 
 
 	return S_OK;
@@ -133,8 +133,34 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 {
 	if (m_pKeyMgr->KeyDown(KEY_X))
 	{
-		m_pShopSub->ChangeEnable();
+		m_eCurState = OBJ_IDLE;
+		Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
+		if (pDavisTransform == nullptr)
+			return 0;
+		_vec3 vDist = *pDavisTransform->Get_Info(Engine::INFO_POS) - *m_pTransformCom->Get_Info(Engine::INFO_POS);
+		_float fLength = D3DXVec3Length(&vDist);
+		if (fLength < 1.5f)
+		{
+			m_pShopSub->ChangeEnable();
+			m_pShoplist->ChangeEnable();
+			m_bIsShop = true;
+			m_bIsLockOn = true;
+		}
+
 	}
+	if (m_bIsShop)
+	{
+		Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
+		_vec3 vDist = *pDavisTransform->Get_Info(Engine::INFO_POS) - *m_pTransformCom->Get_Info(Engine::INFO_POS);
+		_float fLength = D3DXVec3Length(&vDist);
+		if (fLength >= 1.5f)
+		{
+			m_pShopSub->ChangeEnable(false);
+			m_pShoplist->ChangeEnable(false);
+			m_bIsShop = false;
+		}
+	}
+
 	UpdateGague(fTimeDelta);
 
 	m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_ATTACK, false);
@@ -472,6 +498,20 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	if (Engine::Get_DIKeyState(DIK_RETURN) & 0x80)
 	{
 		m_pMeshCom->Set_AnimationSet(8);
+		
+		if (m_pShoplist->IsOn())
+		{
+			wstring wstrItem =m_pShoplist->Get_ItemName();
+			if (wstrItem.find(L"의") != wstring::npos)
+			{
+				if (m_pShopSub->Get_ItemName().find(L"구매") != wstring::npos)
+					AddItem_Inventory(wstrItem);
+				else if (m_pShopSub->Get_ItemName().find(L"판매") != wstring::npos)
+					DeleteItem_Inventory(wstrItem);
+			}
+			
+		}
+
 	}
 
 
@@ -814,15 +854,15 @@ void CPlayer::StateMachine()
 			break;
 		case OBJ_WALK:
 		{
-			m_fAnimSpeed = 1.0f;
-			m_fSpeed = 0.6f;
+			m_fAnimSpeed = 2.0f;
+			m_fSpeed = 2.0f;
 			m_fRotSpeed = 6.f;
 			m_pMeshCom->Set_AnimationSet(45);
 		}
 			break;
 		case OBJ_RUN:
 		{	
-			m_fAnimSpeed = 1.0f;
+			m_fAnimSpeed = 2.0f;
 
 			m_fSpeed = 10.f;//3.5
 			m_fRotSpeed = 6.f;
@@ -1564,6 +1604,59 @@ void CPlayer::UpdateGague(_float fTimeDelta)
 		m_pHPGauge->Set_GaugeRatio(m_fCurHP / m_fMaxHP);
 		m_pSPGauge->Set_GaugeRatio(m_fCurSP / m_fMaxSP);
 	}
+}
+
+void CPlayer::AddItem_Inventory(wstring wstrName)
+{
+	_bool	bIsFind = false;
+	for (auto Item : m_InventoryVec)
+	{
+		if (Item.first.find(wstrName) != wstring::npos)
+		{
+			Item.second++;
+			bIsFind = true;
+		}
+	}
+	if (!bIsFind)
+		m_InventoryVec.push_back(make_pair(wstrName, 1));
+
+	//if (m_InventoryVec.find(wstrName)== m_InventoryVec.end())
+	//{
+	//	m_InventoryVec.insert(pair<wstring, _uint>(wstrName, 1));
+	//}
+	//else
+	//{
+	//	m_InventoryVec.find(wstrName)->second++;
+	//}
+}
+
+void CPlayer::DeleteItem_Inventory(wstring wstrName)
+{
+	auto InvenItr = m_InventoryVec.begin();
+	_bool	bIsFind = false;
+
+	for (auto Item : m_InventoryVec)
+	{
+		if (Item.first.find(wstrName) != wstring::npos)
+		{
+			Item.second--;
+			if (Item.second <= 0)
+			{
+				InvenItr = m_InventoryVec.erase(InvenItr);
+				return;
+			}
+		}
+		InvenItr++;
+	}
+
+	/*if (m_InventoryVec.find(wstrName) == m_InventoryVec.end())
+		return;
+	else
+	{
+		_uint uiVal= m_InventoryVec.find(wstrName)->second--;
+		uiVal = 0;
+		m_InventoryVec.erase(m_InventoryVec.find(wstrName));
+	}*/
 }
 
 

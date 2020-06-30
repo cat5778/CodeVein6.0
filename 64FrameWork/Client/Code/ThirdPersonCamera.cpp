@@ -3,6 +3,7 @@
 #include "Export_Function.h"
 #include "Player.h"
 #include "LockOn.h"
+#include "DynamicObject.h"
 CThirdPersonCamera::CThirdPersonCamera(LPDIRECT3DDEVICE9 pGraphicDev)
 	: Engine::CCamera(pGraphicDev)
 {
@@ -67,7 +68,7 @@ HRESULT CThirdPersonCamera::Ready_Component()
 	pComponent = m_pTransformCom = Engine::CTransform::Create();
 	m_pComponentMap[Engine::ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
 
-
+	m_fVerticalAngle = 170.f;
 	return S_OK;
 }
 //_vec3 Get_CamPos();
@@ -137,6 +138,10 @@ void CThirdPersonCamera::Target_Renewal(const _float& fTimeDelta)
 			{
 				if (!pObject.second->IsMonster())
 					continue;
+				else
+					if (dynamic_cast<CDynamicObject*>(pObject.second)->CheckDeath())
+						continue;
+	
 				_vec3 vMonPos =*pObject.second->Get_Transform()->Get_Info(Engine::INFO_POS);
 				_float fDistance;
 				fDistance = D3DXVec3Length(&(*m_pTransformCom->Get_Info(Engine::INFO_POS) - vMonPos));

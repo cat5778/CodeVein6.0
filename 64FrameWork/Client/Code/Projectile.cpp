@@ -71,6 +71,30 @@ _int CProjectile::Update_GameObject(const _float & fTimeDelta)
 
 void CProjectile::Render_GameObject(void)
 {
+
+	//_matrix mat = m_pTransformCom->m_matWorld;
+
+	//LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
+	//NULL_CHECK(pEffect);
+	//pEffect->AddRef();
+
+	//_uint	iPassMax = 0;
+
+	//SetUp_ConstantTable(pEffect);
+
+	//pEffect->Begin(&iPassMax, 0);
+
+	//pEffect->BeginPass(0);
+
+	//m_pMeshCom->Render_Meshes(pEffect);
+
+	//pEffect->EndPass();
+
+	//pEffect->End();
+
+	//Safe_Release(pEffect);
+
+
 #ifdef _DEBUG
 	if (m_pSphereMesh != nullptr)
 	{
@@ -113,7 +137,7 @@ void CProjectile::Render_GameObject(void)
 		//m_pGraphicDev->SetTransform(D3DTS_WORLD, &matOldWorld);
 
 		m_pGraphicDev->EndScene();
-	}
+}
 #endif
 
 }
@@ -156,11 +180,11 @@ HRESULT CProjectile::Add_Component(void)
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_pComponentMap[Engine::ID_DYNAMIC].emplace(L"Com_Transform", pComponent);
 
-#ifdef _DEBUG
 	pComponent = m_pRendererCom = Engine::Get_Renderer();
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	pComponent->AddRef();
 	m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Renderer", pComponent);
+#ifdef _DEBUG
 
 	Ready_SphereMesh();
 #endif // _DEBUG

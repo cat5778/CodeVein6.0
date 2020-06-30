@@ -25,6 +25,24 @@ HRESULT CSkySphere::Ready_GameObject()
 	//m_pTransformCom->Rotation(Engine::ROT_Z, D3DXToRadian(23.5f)); //나중에 라이팅 태양처럼  같이옮겨주기 
 	m_pTransformCom->Rotation(Engine::ROT_Y, D3DXToRadian(210.f)); //나중에 라이팅 태양처럼  같이옮겨주기 
 
+	if (m_uiStageIdx == 1)
+	{
+		Engine::Get_Light(0)->Position = _vec3(0.f, -400.f, 0.f);
+		Engine::Get_Light(0)->Range = 1000.f;
+		Engine::Get_Light(0)->Diffuse = D3DXCOLOR(0.8f, 0.8f, 1.0f, 0.35f);
+
+		Engine::Get_Light(1)->Position = _vec3(0.f, 400.f, 0.f);
+		Engine::Get_Light(1)->Range = 1000.f;
+		Engine::Get_Light(1)->Diffuse = D3DXCOLOR(0.8f, 0.8f, 1.0f, 0.35f);
+
+
+		for (int i = 2; i < 4; i++)
+		{
+			Engine::Get_Light(i)->Position = _vec3(INIT_VEC3);
+			Engine::Get_Light(i)->Range = 0.f;
+			Engine::Get_Light(i)->Diffuse = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
+		}
+	}
 	return S_OK;
 }
 
@@ -45,8 +63,16 @@ _int CSkySphere::Update_GameObject(const _float& fTimeDelta)
 	_vec3 vLightPos = { 4.f, 1.f, 0.f };
 	D3DXVec3TransformNormal(&vLightPos, &vLightPos, &matLight);
 	_vec3 vPos = vLightPos*m_fLength;
-	Engine::Get_Light(0)->Position = vLightPos*228.f;
+	if(m_uiStageIdx==0)
+		Engine::Get_Light(0)->Position = vLightPos*228.f;
+	else if (m_uiStageIdx == 1)
+	{
+		if (CKeyMgr::GetInstance()->KeyPressing(KEY_K))
+			m_fLength++;
+		
 
+			//cout << m_fLength << endl;
+	}
 	_matrix	matCamWorld;
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matCamWorld);
 

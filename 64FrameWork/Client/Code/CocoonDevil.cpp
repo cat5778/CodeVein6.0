@@ -35,7 +35,7 @@ HRESULT CCocoonDevil::Ready_GameObject()
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_fCurHp = m_fMaxHp =3000.f;
+	m_fCurHp = m_fMaxHp =30.f;
 	m_fAttackRange = 10.f;
 	Set_TransformData();
 
@@ -221,6 +221,8 @@ void CCocoonDevil::StateMachine()
 			m_pMeshCom->Set_AnimationSet(45);
 			break;
 		case CO_Death:
+			m_fAnimSpeed = 2.0f;
+
 			m_pMeshCom->Set_AnimationSet(46);
 			break;
 		case CO_NoneFight_Idle:

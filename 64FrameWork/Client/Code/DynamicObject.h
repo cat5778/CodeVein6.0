@@ -52,7 +52,7 @@ public:
 	void					RotateToTarget(_float fTimeDelta, _float fMinRatio, _float fMaxRatio=0.f);
 	void					SetColliderEnable(_float fMin, _float fMax);
 
-
+	_bool					CheckDeath() { return m_bIsMonDead; }
 
 
 protected:

@@ -32,15 +32,18 @@ private:
 	HRESULT		Add_Component(void);
 	HRESULT		SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 	void		BillBoard();
+
 public:
 	void			ChangeEnable(_bool bIsOn);
-
+	void			ButtonMoveSet();
+	void			Set_SelectParent(_bool bIsParent);
+	void			SelectMode();
+	void			TestPos();
+	_bool			IsOn() { return m_bIsOn; }
+	_uint			Get_ButtonIdx();
 private:
-	
 	void			Blink_Image(_float fTimeDelta, _float fSpeed);
 	void			Set_ButtonPos();
-	void			ButtonMoveSet();
-	void			SelectMode();
 private:
 	Engine::CRcTex*			m_pBufferCom = nullptr;
 	Engine::CTexture*		m_pTextureCom = nullptr;
@@ -52,6 +55,7 @@ private:
 	wstring					m_wstrTexName = L"";
 	_vec3					m_vScale;
 	_bool					m_bIsOn = false;
+	_bool					m_bIsSelectParent=false;
 	_float					m_fSin = 0.f;
 	_float					m_fAlpha = 1.f;
 	_float					m_fFrameCnt = 0;
@@ -64,7 +68,11 @@ private:
 	_uint					m_uiButtonIdx =0;
 	_bool					m_iSelectMode=false;
 	UISTATE					m_eUIState;
-	const _matrix*				m_pTargetWorld=nullptr;
+	const _matrix*			m_pTargetWorld=nullptr;
+
+	_vec3					m_vConvertPos;
+	wstring					m_wstrItem;
+
 public:
 	static C3DButton*		Create(LPDIRECT3DDEVICE9 pGraphicDev,  wstring wstrTexName, _float fLength,_float fRotY,_bool bIsRight =true,UISTATE eUIState=UI_END);
 

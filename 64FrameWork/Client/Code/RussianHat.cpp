@@ -26,7 +26,7 @@ HRESULT CRussianHat::Ready_GameObject()
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_fCurHp = m_fMaxHp = 50.f;
+	m_fCurHp = m_fMaxHp = 200.f;
 	m_fAttackRange = 4.f;
 	Set_TransformData();
 
@@ -115,6 +115,7 @@ _int CRussianHat::Update_GameObject(const _float & fTimeDelta)
 	srand((unsigned int)time(NULL));
 	if (m_fCurHp > 0.f)
 	{
+		UpdateGague(fTimeDelta);
 		if (!m_bIsStart)
 		{
 			Battle_Start(fTimeDelta);
@@ -540,6 +541,15 @@ void CRussianHat::Pattern(_float fTimeDelta)
 
 }
 
+void CRussianHat::UpdateGague(_float fTimeDelta)
+{
+	if (m_pHPGauge != nullptr)
+	{
+		m_pHPGauge->Set_GaugeRatio(m_fCurHp / m_fMaxHp);
+	}
+
+}
+
 
 void CRussianHat::Chaing_Target(_float fTimeDelta)
 {
@@ -630,6 +640,8 @@ void CRussianHat::Phase1(_float fTimeDelta)
 			case RUSSIAN_KETSUGI_AIMSHOOT:
 				break;
 			case RUSSIAN_DEATH_N:
+				m_fAnimSpeed = 2.0f;
+
 				break;
 			default:
 				Idle(fTimeDelta);
