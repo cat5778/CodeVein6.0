@@ -72,8 +72,7 @@ private:
 
 	_vec3					m_vConvertPos;
 	wstring					m_wstrItem;
-	//Test
-	_matrix					m_matTargetWorld;
+
 public:
 	static C3DButton*		Create(LPDIRECT3DDEVICE9 pGraphicDev,  wstring wstrTexName, _float fLength,_float fRotY,_bool bIsRight =true,UISTATE eUIState=UI_END);
 

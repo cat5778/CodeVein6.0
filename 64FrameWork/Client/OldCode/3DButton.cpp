@@ -31,7 +31,6 @@ HRESULT C3DButton::LateReady_GameObject(void)
 {
 
 	m_pCam=dynamic_cast<CThirdPersonCamera*>(Engine::Get_GameObject(L"UI", L"ThirdPersonCamera"));
-	m_pTargetTransformCom = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"UI", L"ShopUI", L"Com_Transform", Engine::ID_DYNAMIC));
 
 	return S_OK;
 }
@@ -40,31 +39,17 @@ _int C3DButton::Update_GameObject(const _float& fTimeDelta)
 {
 	if (!m_bIsOn)
 		return 0;
-	//SelectMode();
-	//ButtonMoveSet();
-	//Blink_Image(fTimeDelta, 100.f);
+	
+	SelectMode();
+	ButtonMoveSet();
+	Blink_Image(fTimeDelta, 100.f);
 
 	Engine::CGameObject::Update_GameObject(fTimeDelta);	
-	//BillBoard();
-	//m_pRendererCom->Add_RenderGroup(Engine::RENDER_ALPHA, this);
-
-
-	TestPos();
-
-	
-
-	m_pTargetTransformCom->Get_WorldMatrix(&m_matTargetWorld);
-
+	BillBoard();
 	m_pRendererCom->Add_RenderGroup(Engine::RENDER_ALPHA, this);
 
 
-
-
-
-
-
-
-
+	//TestPos();
 
 
 	return 0;
@@ -132,8 +117,6 @@ HRESULT C3DButton::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
 	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
 
-
-	matWorld *= m_matTargetWorld;
 	pEffect->SetMatrix("g_matWorld", &matWorld);
 	pEffect->SetMatrix("g_matView", &matView);
 	pEffect->SetMatrix("g_matProj", &matProj);
@@ -396,8 +379,8 @@ void C3DButton::TestPos()
 	{
 		m_vPos.y -= 0.01f;
 		cout << m_vPos.y << endl;
+
 	}
-	m_pTransformCom->Set_Pos(m_vPos.x, m_vPos.y, m_vPos.z);
 }
 
 _uint C3DButton::Get_ButtonIdx()

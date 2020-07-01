@@ -47,6 +47,8 @@ HRESULT C3DUI::LateReady_GameObject(void)
 		wstring wstrButton = m_wstrTexName + L"_BT2";
 		Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
 	}
+
+
 	return S_OK;
 }
 

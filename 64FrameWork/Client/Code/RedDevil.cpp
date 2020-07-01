@@ -690,8 +690,10 @@ void CRedDevil::Collision_Check(_float fTimeDelta)
 	{
 		if (!pObject.second->IsMonster())
 			continue;
-		if (m_wstrInstName.compare(pObject.first) == 0)
+		if (m_wstrInstName.compare(pObject.first) == 0 && dynamic_cast<CDynamicObject*>(pObject.second)->CheckDeath())
 			continue;
+
+
 		pTargetTransCom = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic",
 																pObject.second->Get_InstName().c_str(),
 																L"Com_Transform",
