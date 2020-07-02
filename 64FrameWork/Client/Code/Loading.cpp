@@ -372,21 +372,27 @@ _bool CLoading::Loading_Basic()
 
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,
-		L"LargeSword_H",
+		L"LargeSword_H_Icon",
 		Engine::TEX_NORMAL,
 		L"../../Resource/Texture/WeaponIcon/T_WeaponIcon_LargeSword_H.tga"),
 		E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,
-		L"LargeSword_I",
+		L"LargeSword_I_Icon",
 		Engine::TEX_NORMAL,
 		L"../../Resource/Texture/WeaponIcon/T_WeaponIcon_LargeSword_I.tga"),
 		E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,
-		L"Halberd_B",
+		L"Halberd_B_Icon",
 		Engine::TEX_NORMAL,
 		L"../../Resource/Texture/WeaponIcon/T_WeaponIcon_WeaponHalberd_B.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"Number",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/Number/%d.png",11),
 		E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,

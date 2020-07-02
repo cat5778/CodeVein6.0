@@ -37,7 +37,7 @@ public:
 	_float				Get_AniRatio();
 	void				Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage);
 	DWORD				Get_Dodge() { return m_dwDodge_DirectionFlag; }
-	vector<pair<wstring, _uint>>	Get_InvenVec() {return m_InventoryVec;}
+	vector<pair<wstring, _uint>>*	Get_InvenVec() {return &m_InventoryVec;}
 private:
 	HRESULT				Add_Component(void);
 	void				Key_Input(const _float& fTimeDelta);
@@ -70,7 +70,7 @@ private:
 	void				UpdateGague(_float fTimeDelta);
 	void				AddItem_Inventory(wstring wstrName);
 	void				DeleteItem_Inventory(wstring wstrName);
-
+	void				EnhanceItem_Inventory(wstring wstrName);
 private:
 	_uint					m_uiStageSet;
 	Engine::CTransform*		m_pCameraTransformCom = nullptr;

@@ -1,5 +1,5 @@
-#ifndef ThreeDButton_h__
-#define ThreeDButton_h__
+#ifndef ThreeDNumber_h__
+#define ThreeDNumber_h__
 
 #include "Defines.h"
 #include "GameObject.h"
@@ -15,11 +15,11 @@ class CShader;
 END
 class CThirdPersonCamera;
 
-class C3DButton : public Engine::CGameObject
+class C3DNumBer : public Engine::CGameObject
 {
 private:
-	explicit C3DButton(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight, UISTATE eUIState);
-	virtual ~C3DButton(void);
+	explicit C3DNumBer(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, Engine::CTransform* pParentTransfrom);
+	virtual ~C3DNumBer(void);
 
 public:
 	virtual HRESULT Ready_GameObject(void) override;
@@ -31,19 +31,17 @@ public:
 private:
 	HRESULT		Add_Component(void);
 	HRESULT		SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
-	void		BillBoard();
 
 public:
 	void			ChangeEnable(_bool bIsOn);
-	void			ButtonMoveSet();
-	void			Set_SelectParent(_bool bIsParent);
-	void			SelectMode();
 	void			TestPos();
 	_bool			IsOn() { return m_bIsOn; }
 	_uint			Get_ButtonIdx();
+	void			Set_ButtonPos(_vec3 vPos);
+	void			Set_Number(_uint uiNumber);
+
 private:
 	void			Blink_Image(_float fTimeDelta, _float fSpeed);
-	void			Set_ButtonPos();
 private:
 	Engine::CRcTex*			m_pBufferCom = nullptr;
 	Engine::CTexture*		m_pTextureCom = nullptr;
@@ -60,24 +58,21 @@ private:
 	_float					m_fAlpha = 1.f;
 	_float					m_fFrameCnt = 0;
 	_float					m_fFrameMax = 90.f;
-	_float					m_fRotY=0.f;
-	_float					m_fLength = 0.f;
 	_vec3					m_vPos = { INIT_VEC3 };
-	_bool					m_bIsRight = true;
 	_bool					m_bIsSelect = false;
 	_uint					m_uiButtonIdx =0;
-	_bool					m_iSelectMode=false;
 	UISTATE					m_eUIState;
 	const _matrix*			m_pTargetWorld=nullptr;
 
 	_vec3					m_vConvertPos;
 	wstring					m_wstrItem;
-
+	//Test
+	_matrix					m_matTargetWorld;
 public:
-	static C3DButton*		Create(LPDIRECT3DDEVICE9 pGraphicDev,  wstring wstrTexName, _float fLength,_float fRotY,_bool bIsRight =true,UISTATE eUIState=UI_END);
+	static C3DNumBer*		Create(LPDIRECT3DDEVICE9 pGraphicDev,  wstring wstrTexName, Engine::CTransform* pParentTransfrom);
 
 private:
 	virtual void Free(void) override;
 };
 
-#endif // ThreeDButton_h__
+#endif // ThreeDIcon_h__

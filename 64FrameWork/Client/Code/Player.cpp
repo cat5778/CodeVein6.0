@@ -8,6 +8,8 @@
 #include "LockOn.h"
 #include "3DUI.h"
 #include "3DButton.h"
+#include "Shop.h"
+#include "ShopSub.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
 {
@@ -85,9 +87,12 @@ HRESULT CPlayer::Ready_GameObject(void)
 
 HRESULT CPlayer::LateReady_GameObject(void)
 {
+
 	if (m_ppGameObjectMap == nullptr)
 		m_ppGameObjectMap = &Engine::Get_Layer(L"GameLogic")->Get_ObjectMap();
-	
+
+	m_pCam = dynamic_cast<CThirdPersonCamera*>(Engine::Get_GameObject(L"UI", L"ThirdPersonCamera"));
+
 	Engine::CGameObject* pGameObject = nullptr;
 	Engine::CLayer* pLayer = Engine::Get_Layer(L"UI");
 
@@ -112,13 +117,13 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"LockOnUI", pGameObject), E_FAIL);
 
-	pGameObject = m_pShopSub = C3DUI::Create(m_pGraphicDev, L"ShopUI",2.f,40.f,true,UI_SHOP_SUB);
+	pGameObject = m_pShopSub = CShopSub::Create(m_pGraphicDev, L"ShopUI", 2.f, 40.f, true, UI_SHOP_SUB);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopSubUI", pGameObject), E_FAIL);
+
+	pGameObject = m_pShoplist = CShop::Create(m_pGraphicDev, L"ShopUI3", 2.f, -40.f, false, UI_SHOP);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopUI", pGameObject), E_FAIL);
-
-	//pGameObject = m_pShoplist = C3DUI::Create(m_pGraphicDev, L"ShopUI3", 2.f, -40.f,false, UI_SHOP);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopUI3", pGameObject), E_FAIL);
 /*
 	pGameObject  = C3DButton::Create(m_pGraphicDev, L"Select", 1.9f, 40.f);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
@@ -133,33 +138,33 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 {
 	if (m_pKeyMgr->KeyDown(KEY_X))
 	{
-		//m_eCurState = OBJ_IDLE;
-		//Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
-		//if (pDavisTransform == nullptr)
-		//	return 0;
-		//_vec3 vDist = *pDavisTransform->Get_Info(Engine::INFO_POS) - *m_pTransformCom->Get_Info(Engine::INFO_POS);
-		//_float fLength = D3DXVec3Length(&vDist);
-		//if (fLength < 1.5f)
+		m_eCurState = OBJ_IDLE;
+		Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
+		if (pDavisTransform == nullptr)
+			return 0;
+		_vec3 vDist = *pDavisTransform->Get_Info(Engine::INFO_POS) - *m_pTransformCom->Get_Info(Engine::INFO_POS);
+		_float fLength = D3DXVec3Length(&vDist);
+		if (fLength < 1.5f)
 		{
-			m_pShopSub->ChangeEnable();
-			//m_pShoplist->ChangeEnable();
+			m_pShopSub->ChangeEnable(true);
+			m_pShoplist->ChangeEnable(true);
 			m_bIsShop = true;
 			m_bIsLockOn = true;
 		}
 
 	}
-	//if (m_bIsShop)
-	//{
-	//	Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
-	//	_vec3 vDist = *pDavisTransform->Get_Info(Engine::INFO_POS) - *m_pTransformCom->Get_Info(Engine::INFO_POS);
-	//	_float fLength = D3DXVec3Length(&vDist);
-	//	if (fLength >= 1.5f)
-	//	{
-	//		m_pShopSub->ChangeEnable(false);
-	//		//m_pShoplist->ChangeEnable(false);
-	//		m_bIsShop = false;
-	//	}
-	//}
+	if (m_bIsShop)
+	{
+		Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
+		_vec3 vDist = *pDavisTransform->Get_Info(Engine::INFO_POS) - *m_pTransformCom->Get_Info(Engine::INFO_POS);
+		_float fLength = D3DXVec3Length(&vDist);
+		if (fLength >= 1.5f)
+		{
+			m_pShopSub->ChangeEnable(false);
+			m_pShoplist->ChangeEnable(false);
+			m_bIsShop = false;
+		}
+	}
 
 	UpdateGague(fTimeDelta);
 
@@ -330,7 +335,6 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 	{
 		
 		m_bIsLockOn ? m_bIsLockOn = false : m_bIsLockOn = true;
-		m_pCam = dynamic_cast<CThirdPersonCamera*>(Engine::Get_GameObject(L"UI", L"ThirdPersonCamera"));
 		m_pCam->LockOn(m_bIsLockOn);
 	}
 
@@ -495,23 +499,24 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 		m_dwDirectionFlag = 0;
 
 	}
-	if (Engine::Get_DIKeyState(DIK_RETURN) & 0x80)
+
+	if (m_pKeyMgr->KeyDown(KEY_RETURN))
 	{
-		m_pMeshCom->Set_AnimationSet(8);
-		
 		if (m_pShoplist->IsOn())
 		{
-			//wstring wstrItem =m_pShoplist->Get_ItemName();
-			//if (wstrItem.find(L"의") != wstring::npos)
-			//{
-			//	if (m_pShopSub->Get_ItemName().find(L"구매") != wstring::npos)
-			//		AddItem_Inventory(wstrItem);
-			//	else if (m_pShopSub->Get_ItemName().find(L"판매") != wstring::npos)
-			//		DeleteItem_Inventory(wstrItem);
-			//}
-			
-		}
+			wstring wstrItem = m_pShoplist->Get_ItemName();
+			if (wstrItem.find(L"의") != wstring::npos)
+			{
+				if (m_pShopSub->Get_ItemName().find(L"구매") != wstring::npos)
+					AddItem_Inventory(wstrItem);
+				else if (m_pShopSub->Get_ItemName().find(L"판매") != wstring::npos)
+					DeleteItem_Inventory(wstrItem);
+				else if (m_pShopSub->Get_ItemName().find(L"강화") != wstring::npos)
+					EnhanceItem_Inventory(wstrItem);
 
+			}
+
+		}
 	}
 
 
@@ -1609,9 +1614,9 @@ void CPlayer::UpdateGague(_float fTimeDelta)
 void CPlayer::AddItem_Inventory(wstring wstrName)
 {
 	_bool	bIsFind = false;
-	for (auto Item : m_InventoryVec)
+	for (auto &Item : m_InventoryVec)
 	{
-		if (Item.first.find(wstrName) != wstring::npos)
+		if (Item.first.compare(wstrName) ==0)
 		{
 			Item.second++;
 			bIsFind = true;
@@ -1635,9 +1640,9 @@ void CPlayer::DeleteItem_Inventory(wstring wstrName)
 	auto InvenItr = m_InventoryVec.begin();
 	_bool	bIsFind = false;
 
-	for (auto Item : m_InventoryVec)
+	for (auto &Item : m_InventoryVec)
 	{
-		if (Item.first.find(wstrName) != wstring::npos)
+		if (Item.first.compare(wstrName)==0)
 		{
 			Item.second--;
 			if (Item.second <= 0)
@@ -1657,6 +1662,61 @@ void CPlayer::DeleteItem_Inventory(wstring wstrName)
 		uiVal = 0;
 		m_InventoryVec.erase(m_InventoryVec.find(wstrName));
 	}*/
+}
+
+void CPlayer::EnhanceItem_Inventory(wstring wstrName)
+{
+	wstring wstrEnhaceIdx, wstrEnhance;
+	_uint uiEnhanceNum, uiFindNum;
+
+	if (wstrName.find(L'+') == wstring::npos)
+	{
+		wstrEnhance = wstrName + L"+" + to_wstring(1);
+
+	}
+	else
+	{
+		uiFindNum = wstrName.find(L'+');
+		wstrEnhaceIdx = wstrName.substr(uiFindNum+1);
+		uiEnhanceNum = _wtoi(wstrEnhaceIdx.c_str());
+		wstrEnhance = wstrName.substr(0, uiFindNum);
+		wstrEnhance = wstrEnhance + L"+" + to_wstring(uiEnhanceNum + 1);
+	}
+
+	_bool	bIsFind = false;
+	for (auto &Item : m_InventoryVec) //강화된아이템추가
+	{
+		if (Item.first.compare(wstrEnhance) ==0)
+		{
+			Item.second++;
+			bIsFind = true;
+		}
+	}
+
+
+	if (!bIsFind)
+		m_InventoryVec.push_back(make_pair(wstrEnhance, 1));
+
+
+
+	auto InvenItr = m_InventoryVec.begin();
+	for (auto &Item : m_InventoryVec)
+	{
+		if (Item.first.compare(wstrName) ==0)
+		{
+			Item.second--;
+			if (Item.second <= 0)
+			{
+				InvenItr = m_InventoryVec.erase(InvenItr);
+				break;
+			}
+		}
+		else
+			InvenItr++;
+	}// 하나제거 
+
+
+
 }
 
 

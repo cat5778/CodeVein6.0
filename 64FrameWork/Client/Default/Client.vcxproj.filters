@@ -157,6 +157,15 @@
     <Filter Include="02. GameObejct\02. Public\05. UI\02. Icon">
       <UniqueIdentifier>{633e1919-80f4-4c0c-bd2a-77c428642b1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObejct\02. Public\05. UI\3DUI\Shop">
+      <UniqueIdentifier>{368a48b0-9c5a-4cb3-8343-6019da641cf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObejct\02. Public\05. UI\3DUI\Icon">
+      <UniqueIdentifier>{8de4a603-87ca-4674-b5fe-a7e54fa41972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObejct\02. Public\05. UI\3DUI\Number">
+      <UniqueIdentifier>{127f0500-f168-4d5c-9d3a-1adcbee2ef64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -282,6 +291,18 @@
     <ClInclude Include="..\Code\3DButton.h">
       <Filter>02. GameObejct\02. Public\05. UI\3DUI\Button</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Shop.h">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\ShopSub.h">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\3DIcon.h">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\3DNum.h">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Number</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -403,6 +424,18 @@
     </ClCompile>
     <ClCompile Include="..\Code\3DButton.cpp">
       <Filter>02. GameObejct\02. Public\05. UI\3DUI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Shop.cpp">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ShopSub.cpp">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\3DIcon.cpp">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\3DNum.cpp">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Number</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

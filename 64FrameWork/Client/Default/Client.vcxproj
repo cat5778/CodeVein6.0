@@ -174,6 +174,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\3DButton.h" />
+    <ClInclude Include="..\Code\3DIcon.h" />
+    <ClInclude Include="..\Code\3DNum.h" />
     <ClInclude Include="..\Code\3DUI.h" />
     <ClInclude Include="..\Code\BackGround.h" />
     <ClInclude Include="..\Code\CocoonDevil.h" />
@@ -197,6 +199,8 @@
     <ClInclude Include="..\Code\RedDevil.h" />
     <ClInclude Include="..\Code\RussianHat.h" />
     <ClInclude Include="..\Code\Shield.h" />
+    <ClInclude Include="..\Code\Shop.h" />
+    <ClInclude Include="..\Code\ShopSub.h" />
     <ClInclude Include="..\Code\SkyBox.h" />
     <ClInclude Include="..\Code\SkySphere.h" />
     <ClInclude Include="..\Code\SoundMgr.h" />
@@ -217,6 +221,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\3DButton.cpp" />
+    <ClCompile Include="..\Code\3DIcon.cpp" />
+    <ClCompile Include="..\Code\3DNum.cpp" />
     <ClCompile Include="..\Code\3DUI.cpp" />
     <ClCompile Include="..\Code\BackGround.cpp" />
     <ClCompile Include="..\Code\CocoonDevil.cpp" />
@@ -240,6 +246,8 @@
     <ClCompile Include="..\Code\RedDevil.cpp" />
     <ClCompile Include="..\Code\RussianHat.cpp" />
     <ClCompile Include="..\Code\Shield.cpp" />
+    <ClCompile Include="..\Code\Shop.cpp" />
+    <ClCompile Include="..\Code\ShopSub.cpp" />
     <ClCompile Include="..\Code\SkyBox.cpp" />
     <ClCompile Include="..\Code\SkySphere.cpp" />
     <ClCompile Include="..\Code\SoundMgr.cpp" />

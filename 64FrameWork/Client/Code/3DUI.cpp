@@ -8,7 +8,7 @@
 C3DUI::C3DUI(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight ,UISTATE eUIState)
 	: Engine::CGameObject(pGraphicDev),m_wstrTexName(wstrTexName),m_fLength(fLength),m_fRotY(fRotY), m_bIsRight(bIsRight),m_eUIState(eUIState)
 {
-
+	m_wstrInstName = L"Shop_UI";
 }
 
 C3DUI::~C3DUI(void)
@@ -31,20 +31,20 @@ HRESULT C3DUI::Ready_GameObject(void)
 HRESULT C3DUI::LateReady_GameObject(void)
 {
 
-	m_pCam=dynamic_cast<CThirdPersonCamera*>(Engine::Get_GameObject(L"UI", L"ThirdPersonCamera"));
+	m_pCam = dynamic_cast<CThirdPersonCamera*>(Engine::Get_GameObject(L"UI", L"ThirdPersonCamera"));
 	if (m_eUIState >= UI_SHOP_SUB)
 	{
-		CGameObject* pGameObject=nullptr;
-		pGameObject = m_pButton = C3DButton::Create(m_pGraphicDev, L"Select", m_fLength-0.1f, m_fRotY, m_bIsRight,m_eUIState);
-		wstring wstrButton = m_wstrTexName + L"_BT";
+		CGameObject* pGameObject = nullptr;
+		pGameObject = m_pButton = C3DButton::Create(m_pGraphicDev, L"Select", m_pTransformCom, m_eUIState);
+		wstring wstrButton = m_wstrInstName + L"_BT";
 		Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
 
 	}
 	else if(m_eUIState<=UI_INVEN)
 	{
 		CGameObject* pGameObject = nullptr;
-		pGameObject = m_pButton = C3DButton::Create(m_pGraphicDev, L"Select2", m_fLength-0.1f, m_fRotY, m_bIsRight, m_eUIState);
-		wstring wstrButton = m_wstrTexName + L"_BT2";
+		pGameObject = m_pButton = C3DButton::Create(m_pGraphicDev, L"Select2",m_pTransformCom , m_eUIState);
+		wstring wstrButton = m_wstrInstName + L"_BT2";
 		Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
 	}
 
@@ -62,7 +62,7 @@ _int C3DUI::Update_GameObject(const _float& fTimeDelta)
 		if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
 		{
 			m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
-			m_pButton->Set_SelectParent(true);
+			//m_pButton->Set_SelectParent(true);
 
 
 		}
@@ -71,7 +71,7 @@ _int C3DUI::Update_GameObject(const _float& fTimeDelta)
 			if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
 			{
 				m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
-				m_pButton->Set_SelectParent(false);
+				//m_pButton->Set_SelectParent(false);
 			}
 		}
 	}
@@ -80,14 +80,14 @@ _int C3DUI::Update_GameObject(const _float& fTimeDelta)
 		if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
 		{
 			m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
-			m_pButton->Set_SelectParent(false);
+			//m_pButton->Set_SelectParent(false);
 		}
 		else
 		{
 			if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
 			{
 				m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
-				m_pButton->Set_SelectParent(true);
+				//m_pButton->Set_SelectParent(true);
 
 			}
 		}
@@ -244,14 +244,6 @@ void C3DUI::TestPos()
 
 void C3DUI::InsertSlot()
 {
-	vector<pair<wstring, _uint>>	 InvenMap = dynamic_cast<CPlayer*>(Engine::Get_GameObject(L"GameLogic", L"Player"))->Get_InvenVec();
-	//for (auto Item : InvenMap)
-	//{
-	//	if (Item.first.find(L"ø’¿« ¥Î∞À") != wstring::npos)
-	//	{
-	//		//CImage::Create(m_pGraphicDev, Halberd_B)
-	//	}
-	//}
 }
 
 
