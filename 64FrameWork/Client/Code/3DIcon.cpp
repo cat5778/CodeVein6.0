@@ -52,7 +52,6 @@ HRESULT C3DIcon::LateReady_GameObject(void)
 	Engine::Get_Layer(L"UI")->Add_GameObject(wstrNum.c_str(), pGameObject);
 
 
-
 	return S_OK;
 }
 

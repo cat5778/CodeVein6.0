@@ -170,15 +170,15 @@ void CShop::CheckInventory()
 		switch (iWeaponIdx[i])
 		{
 		case 0:
-			m_pIcon[i]->Set_ButtonPos(_vec3{ -0.3f, -0.18f ,-0.005f });
+			m_pIcon[i]->Set_ButtonPos(_vec3{ -0.3f, -0.18f ,-0.02f });
 			m_pIcon[i]->Set_Number((*m_InvenVec)[iWeaponIdx[i]].second);
 			break;
 		case 1:
-			m_pIcon[i]->Set_ButtonPos(_vec3{ -0.02f, -0.18f ,-0.005f });
+			m_pIcon[i]->Set_ButtonPos(_vec3{ -0.02f, -0.18f ,-0.02f });
 			m_pIcon[i]->Set_Number((*m_InvenVec)[iWeaponIdx[i]].second);
 			break;
 		case 2:
-			m_pIcon[i]->Set_ButtonPos(_vec3{ 0.27f, -0.18f ,-0.005f });
+			m_pIcon[i]->Set_ButtonPos(_vec3{ 0.27f, -0.18f ,-0.02f });
 			m_pIcon[i]->Set_Number((*m_InvenVec)[iWeaponIdx[i]].second);
 			break;
 
