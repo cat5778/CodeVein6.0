@@ -1,52 +1,79 @@
 #include "stdafx.h"
-#include "InvenSub.h"
+#include "Portal.h"
 #include "3DButton.h"
 #include "Export_Function.h"
 #include "ThirdPersonCamera.h"
 #include "Player.h"
 #include "Image.h"
+#include "3DIcon.h"
+#include "InvenInfo.h"
 
-CInvenSub::CInvenSub(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight ,UISTATE eUIState)
+#define	ITEM_NUM 3
+CPortal::CPortal(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight ,UISTATE eUIState)
 	:C3DUI(pGraphicDev,wstrTexName,fLength,fRotY,bIsRight,eUIState)
 {
-	m_wstrInstName = L"InvenSub_UI";
+	m_wstrInstName = L"PortalUI";
 }
 
-CInvenSub::~CInvenSub(void)
+CPortal::~CPortal(void)
 {
 
 }
 
-HRESULT CInvenSub::Ready_GameObject(void)
+HRESULT CPortal::Ready_GameObject(void)
 {
 	C3DUI::Ready_GameObject();
-	m_fGap = 0.45f;
 
+	m_fGap = 0.2f;
 	return S_OK;
 }
 
-HRESULT CInvenSub::LateReady_GameObject(void)
+HRESULT CPortal::LateReady_GameObject(void)
 {
 
 	C3DUI::LateReady_GameObject();
 
+	CGameObject* pGameObject = nullptr;
+	wstring wstrButton;
+	pGameObject = m_pIcon[0] = C3DIcon::Create(m_pGraphicDev, L"T_HomeA_UI", m_pTransformCom, m_eUIState);
+	wstrButton = m_wstrInstName + L"_Icon1";
+	Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
+
+	pGameObject = m_pIcon[1] = C3DIcon::Create(m_pGraphicDev, L"T_st09E_UI", m_pTransformCom, m_eUIState);
+	wstrButton = m_wstrInstName + L"_Icon2";
+	Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
+
 
 	return S_OK;
 }
 
-_int CInvenSub::Update_GameObject(const _float& fTimeDelta)
+_int CPortal::Update_GameObject(const _float& fTimeDelta)
 {
 	if (!m_bIsOn)
 		return 0;
-	m_fGap = 0.45f;
+
+	m_pIcon[0]->Set_ButtonPos(_vec3{ -0.3f, -0.18f ,-0.02f });
+
 	if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
 	{
-		m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+		m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
+		//if (Engine::Get_DIKeyState(DIK_LEFT))
+		//	m_vTempTest.x -= 0.01f;
+		//if (Engine::Get_DIKeyState(DIK_RIGHT))
+		//	m_vTempTest.x += 0.01f;
 	}
 	else
 	{
 		if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
-			m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
+		{
+			m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+
+			//if (Engine::Get_DIKeyState(DIK_UP))
+			//	m_vTempTest.y+= 0.01f;
+			//if (Engine::Get_DIKeyState(DIK_DOWN))
+			//	m_vTempTest.y -= 0.01f;
+			//m_vTempTest.z = -0.1f;
+		}
 	}
 
 	Engine::CGameObject::Update_GameObject(fTimeDelta);
@@ -56,7 +83,7 @@ _int CInvenSub::Update_GameObject(const _float& fTimeDelta)
 	return 0;
 }
 
-void CInvenSub::Render_GameObject(void)
+void CPortal::Render_GameObject(void)
 {
 
 	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
@@ -80,7 +107,7 @@ void CInvenSub::Render_GameObject(void)
 	Safe_Release(pEffect);
 }
 
-HRESULT CInvenSub::Add_Component(void)
+HRESULT CPortal::Add_Component(void)
 {
 	Engine::CComponent*		pComponent = nullptr;
 
@@ -110,7 +137,7 @@ HRESULT CInvenSub::Add_Component(void)
 
 
 
-HRESULT CInvenSub::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
+HRESULT CPortal::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 {
 	_matrix			matWorld, matView, matProj;
 
@@ -130,22 +157,31 @@ HRESULT CInvenSub::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 	return S_OK;
 }
 
-wstring CInvenSub::Get_ItemName()
+void CPortal::ChangeEnable(_bool bIsEnable)
 {
-	wstring wstrItem;
-	switch (m_pButton->Get_ButtonIdx())
+	m_bIsOn = bIsEnable;
+	if (m_pButton != nullptr)
 	{
-	case 0:
-		wstrItem = L"Âø¿ë";
-		break;
-	} 
-
-	return wstrItem;
+		m_pButton->ChangeEnable(m_bIsOn);
+		for (int i = 0; i < 2; i++)
+			m_pIcon[i]->ChangeEnable(m_bIsOn);
+	}
 }
 
-CInvenSub* CInvenSub::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsLeft, UISTATE eUIState)
+void CPortal::ChangeEnable()
 {
-	CInvenSub*	pInstance = new CInvenSub(pGraphicDev, wstrTexName, fLength,fRotY,bIsLeft, eUIState);
+	m_bIsOn = !m_bIsOn;
+	if (m_pButton != nullptr)
+	{
+		m_pButton->ChangeEnable(m_bIsOn);
+		for (int i = 0; i < 2; i++)
+			m_pIcon[i]->ChangeEnable(m_bIsOn);
+	}
+}
+
+CPortal* CPortal::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsLeft, UISTATE eUIState)
+{
+	CPortal*	pInstance = new CPortal(pGraphicDev, wstrTexName, fLength,fRotY,bIsLeft, eUIState);
 
 	if (FAILED(pInstance->Ready_GameObject()))
 		Engine::Safe_Release(pInstance);
@@ -153,7 +189,7 @@ CInvenSub* CInvenSub::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName,
 	return pInstance;
 }
 
-void CInvenSub::Free(void)
+void CPortal::Free(void)
 {
 	C3DUI::Free();
 }

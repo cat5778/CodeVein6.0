@@ -6,7 +6,7 @@
 #include "Player.h"
 #include "Image.h"
 #include "3DIcon.h"
-
+#include "InvenInfo.h"
 #define	ITEM_NUM 3
 CInven::CInven(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight ,UISTATE eUIState)
 	:C3DUI(pGraphicDev,wstrTexName,fLength,fRotY,bIsRight,eUIState)
@@ -24,7 +24,7 @@ HRESULT CInven::Ready_GameObject(void)
 	C3DUI::Ready_GameObject();
 	m_InvenVec = dynamic_cast<CPlayer*>(Engine::Get_GameObject(L"GameLogic", L"Player"))->Get_InvenVec();
 
-
+	m_fGap = 0.6f;
 	return S_OK;
 }
 
@@ -36,18 +36,20 @@ HRESULT CInven::LateReady_GameObject(void)
 	CGameObject* pGameObject = nullptr;
 	wstring wstrButton;
 	pGameObject = m_pIcon[0] = C3DIcon::Create(m_pGraphicDev, L"LargeSword_H_Icon", m_pTransformCom, m_eUIState);
-	wstrButton = m_wstrTexName + L"_Icon1";
+	wstrButton = m_wstrInstName + L"_Icon1";
 	Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
 
 	pGameObject = m_pIcon[1] = C3DIcon::Create(m_pGraphicDev, L"LargeSword_I_Icon", m_pTransformCom, m_eUIState);
-	wstrButton = m_wstrTexName + L"_Icon2";
+	wstrButton = m_wstrInstName + L"_Icon2";
 	Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
 
 	pGameObject = m_pIcon[2] = C3DIcon::Create(m_pGraphicDev, L"Halberd_B_Icon", m_pTransformCom, m_eUIState);
-	wstrButton = m_wstrTexName + L"_Icon3";
+	wstrButton = m_wstrInstName + L"_Icon3";
 	Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
 
-
+	pGameObject = m_pInfoUI= CInvenInfo::Create(m_pGraphicDev, L"EmptyFrame2", m_fLength);
+	wstrButton = m_wstrInstName + L"_InfoUI";
+	Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
 	return S_OK;
 }
 
@@ -57,6 +59,7 @@ _int CInven::Update_GameObject(const _float& fTimeDelta)
 		return 0;
 
 	CheckInventory();
+	m_fGap = 0.45f;
 	if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
 	{
 		m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
@@ -237,37 +240,31 @@ wstring CInven::Get_ItemName()
 		if (Item.first.find(L"기사의대검") != wstring::npos)
 		{
 			iWeaponIdx[1] = iIDx;
-		}if (Item.first.find(L"병사의할버드") != wstring::npos)
+		}
+		if (Item.first.find(L"병사의할버드") != wstring::npos)
 		{
 			iWeaponIdx[2] = iIDx;
 		}
 		iIDx++;
 	}
-	if (ITEM_NUM > iSelectIdx)
+	
+	if (iWeaponIdx[iSelectIdx] >= 0)
 	{
-		return wstrItem[iSelectIdx];
-
+		switch (iSelectIdx)
+		{
+		case 0:
+			return (*m_InvenVec)[0].first;
+			break;
+		case 1:
+			return (*m_InvenVec)[1].first;
+			break;
+		case 2:
+			return (*m_InvenVec)[2].first;
+			break;
+		}
 	}
 	else
-	{
-		if (iWeaponIdx[iSelectIdx - ITEM_NUM] >= 0)
-		{
-			switch (iSelectIdx - ITEM_NUM)
-			{
-			case 0:
-				return (*m_InvenVec)[0].first;
-				break;
-			case 1:
-				return (*m_InvenVec)[1].first;
-				break;
-			case 2:
-				return (*m_InvenVec)[2].first;
-				break;
-			}
-		}
-		else
-			return L"";
-	}
+		return L"";
 
 }
 
@@ -277,7 +274,8 @@ void CInven::ChangeEnable(_bool bIsEnable)
 	if (m_pButton != nullptr)
 	{
 		m_pButton->ChangeEnable(m_bIsOn);
-		for(int i=0; i<3; i++)
+		m_pInfoUI->ChangeEnable(m_bIsOn);
+		for (int i = 0; i < 3; i++)
 			m_pIcon[i]->ChangeEnable(m_bIsOn);
 	}
 }
@@ -287,6 +285,7 @@ void CInven::ChangeEnable()
 	m_bIsOn = !m_bIsOn;
 	if (m_pButton != nullptr)
 	{
+		m_pInfoUI->ChangeEnable(m_bIsOn);
 		m_pButton->ChangeEnable(m_bIsOn);
 		for (int i = 0; i < 3; i++)
 			m_pIcon[i]->ChangeEnable(m_bIsOn);

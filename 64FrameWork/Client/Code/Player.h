@@ -25,6 +25,10 @@ class CInven;
 class CInvenSub;
 class CSword;
 class CHalberd;
+class CPortal;
+class CPortalSub;
+
+
 class CPlayer : public Engine::CGameObject
 {
 private:
@@ -44,6 +48,7 @@ public:
 	void				Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage);
 	DWORD				Get_Dodge() { return m_dwDodge_DirectionFlag; }
 	vector<pair<wstring, _uint>>*	Get_InvenVec() {return &m_InventoryVec;}
+	void							Set_InvenVec(vector<pair<wstring, _uint>> InvenVec) {m_InventoryVec = InvenVec;}
 private:
 	HRESULT				Add_Component(void);
 	void				Key_Input(const _float& fTimeDelta);
@@ -128,13 +133,12 @@ private:
 	CGauge*					m_pSPGaugeBar = nullptr;
 	CShop*					m_pShoplist = nullptr;
 	CShopSub*				m_pShopSub = nullptr;
-	CInvenSub*					m_pInvenSub = nullptr;
 	CInven*					m_pInven = nullptr;
-
+	CInvenSub*				m_pInvenSub = nullptr;
+ 	CPortal*				m_pPortal = nullptr;
 
 	//weapon
-	CSword*					m_pSword = nullptr;
-	CHalberd*				m_pHalberd = nullptr;
+	CSword*					m_pSword[3] = { nullptr,nullptr,nullptr };
 
 	_bool					m_bIsShop = false;
 	vector<pair<wstring, _uint>>		m_InventoryVec;

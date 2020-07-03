@@ -50,6 +50,7 @@ HRESULT CField::LateReady_Scene(void)
 	//Engine::CCamera* pCamera = dynamic_cast<Engine::CCamera*>(Engine::Get_GameObject(L"GameLogic", L"DynamicCamera"));
 	//NULL_CHECK_RETURN(pCamera, E_FAIL);
 	//Engine::Get_Renderer()->Set_Perspective(*pCamera->Get_Projection());
+	dynamic_cast<CPlayer*>(Engine::Get_GameObject(L"GameLogic", L"Player"))->Set_InvenVec(Get_Inven());
 
 	return S_OK;
 }

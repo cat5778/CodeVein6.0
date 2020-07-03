@@ -1,5 +1,5 @@
-#ifndef Sword_h__
-#define Sword_h__
+#ifndef DisplayWapon_h__
+#define DisplayWapon_h__
 
 #include "Defines.h"
 #include "GameObject.h"
@@ -15,11 +15,11 @@ class CShader;
 
 END
 
-class CSword : public Engine::CGameObject
+class CDisplayWeapon : public Engine::CGameObject
 {
 private:
-	explicit				CSword(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName);
-	virtual					~CSword(void);
+	explicit				CDisplayWeapon(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName);
+	virtual					~CDisplayWeapon(void);
 
 public:
 
@@ -52,10 +52,10 @@ private:
 	const	_matrix*		m_pParentWorldMatrix = nullptr;
 
 public:
-	static CSword*		Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName, const _uint& iFlag);
+	static CDisplayWeapon*		Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName, const _uint& iFlag);
 
 private:
 	virtual void Free(void) override;
 };
 
-#endif // Sword_h__
+#endif // DisplayWapon_h__

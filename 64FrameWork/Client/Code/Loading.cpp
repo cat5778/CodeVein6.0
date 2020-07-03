@@ -328,6 +328,13 @@ _bool CLoading::Loading_Basic()
 		E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,
+		L"EmptyFrame2",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/UIFrame/EmptyFrame2.tga"),
+		E_FAIL);
+
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
 		L"ShopUI2",
 		Engine::TEX_NORMAL,
 		L"../../Resource/Texture/UIFrame/ShopUI2.tga"),
@@ -390,10 +397,25 @@ _bool CLoading::Loading_Basic()
 		E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,
+		L"T_HomeA_UI",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/WayPointImage/T_HomeA_UI.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
+		L"T_st09E_UI",
+		Engine::TEX_NORMAL,
+		L"../../Resource/Texture/WayPointImage/T_st09E_UI.tga"),
+		E_FAIL);
+	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
+		RESOURCE_STAGE,
 		L"Number",
 		Engine::TEX_NORMAL,
 		L"../../Resource/Texture/Number/%d.tga",11),
 		E_FAIL);
+
+
+
 
 	FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,
 		RESOURCE_STAGE,

@@ -6,9 +6,13 @@
 #include "Player.h"
 #include "Image.h"
 C3DUI::C3DUI(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight ,UISTATE eUIState)
-	: Engine::CGameObject(pGraphicDev),m_wstrTexName(wstrTexName),m_fLength(fLength),m_fRotY(fRotY), m_bIsRight(bIsRight),m_eUIState(eUIState)
+	: Engine::CGameObject(pGraphicDev), m_wstrTexName(wstrTexName), m_fLength(fLength), m_fRotY(fRotY), m_bIsRight(bIsRight), m_eUIState(eUIState)
 {
-	m_wstrInstName = L"Shop_UI";
+}
+
+C3DUI::C3DUI(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength)
+	: Engine::CGameObject(pGraphicDev), m_wstrTexName(wstrTexName), m_fLength(fLength), m_fRotY(0.f), m_bIsRight(false)
+{
 }
 
 C3DUI::~C3DUI(void)
@@ -56,45 +60,44 @@ _int C3DUI::Update_GameObject(const _float& fTimeDelta)
 {
 	if (!m_bIsOn)
 		return 0;
-
-	if (m_eUIState<UI_SHOP_SUB)
+	if (!m_bIsMid)
 	{
-		if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
+		if (m_eUIState < UI_SHOP_SUB)
 		{
-			m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
-			//m_pButton->Set_SelectParent(true);
-
-
-		}
-		else
-		{
-			if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
-			{
-				m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
-				//m_pButton->Set_SelectParent(false);
-			}
-		}
-	}
-	else
-	{
-		if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
-		{
-			m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
-			//m_pButton->Set_SelectParent(false);
-		}
-		else
-		{
-			if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
+			if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
 			{
 				m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
 				//m_pButton->Set_SelectParent(true);
 
+
+			}
+			else
+			{
+				if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
+				{
+					m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+					//m_pButton->Set_SelectParent(false);
+				}
+			}
+		}
+		else
+		{
+			if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
+			{
+				m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
+				//m_pButton->Set_SelectParent(false);
+			}
+			else
+			{
+				if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
+				{
+					m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
+					//m_pButton->Set_SelectParent(true);
+
+				}
 			}
 		}
 	}
-
-
-
 	Engine::CGameObject::Update_GameObject(fTimeDelta);
 	
 	BillBoard();
@@ -189,7 +192,10 @@ void C3DUI::BillBoard()
 	D3DXVec3Normalize(&vRight, &vRight);
 
 	_vec3 vDir;
-	m_bIsRight ? vDir = vRight*0.3f + vLook : vDir = vRight*-0.3f + vLook;
+	if (!m_bIsMid)
+		m_bIsRight ? vDir = vRight*m_fGap + vLook : vDir = vRight*-m_fGap + vLook;
+	else
+		vDir = vLook;
 	D3DXVec3Normalize(&vDir, &vDir);
 
 	_vec3 vTargetPos = m_pCam->Get_CamPos() + (vDir*m_fLength);
@@ -327,6 +333,11 @@ wstring C3DUI::Get_ItemName()
 	}
 
 	return wstrItem;
+}
+
+void C3DUI::Set_Mid()
+{
+	m_bIsMid = true;
 }
 
 C3DUI* C3DUI::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsLeft, UISTATE eUIState)

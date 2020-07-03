@@ -103,7 +103,8 @@ _int CStage::Update_Scene(const _float& fTimeDelta)
 		Engine::CScene*		pScene = CField::Create(m_pGraphicDev);
 		if (pScene == nullptr)
 			return -1;
-
+		pScene->Set_Inven(*dynamic_cast<CPlayer*>(Engine::Get_GameObject(L"GameLogic", L"Player"))->Get_InvenVec());
+		
 		Engine::SetUp_Scene(pScene);
 		return iEvent;
 	}

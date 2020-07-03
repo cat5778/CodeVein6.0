@@ -13,7 +13,8 @@
 #include "InvenSub.h"
 #include "Inven.h"
 #include "Sword.h"
-#include "Halberd.h"
+#include "Portal.h"
+
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
@@ -138,18 +139,29 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"InvenUI", pGameObject), E_FAIL);
 
+	pGameObject = m_pPortal = CPortal::Create(m_pGraphicDev, L"EmptyFrame", 2.f, -40.f, false, UI_PORTAL);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"PortalUI", pGameObject), E_FAIL);
+
+
 
 	pLayer = Engine::Get_Layer(L"GameLogic");
 	//// //Sword2
-	pGameObject = m_pSword=CSword::Create(m_pGraphicDev, 0);
+	pGameObject = m_pSword[0] = CSword::Create(m_pGraphicDev, L"SM_NormalGreatSwordA_ba01", 0);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_Sword", pGameObject), E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_SwordA", pGameObject), E_FAIL);
 
-	pGameObject = m_pHalberd=CHalberd::Create(m_pGraphicDev, 0);
+	pGameObject = m_pSword[1]=CSword::Create(m_pGraphicDev, L"SM_NormalGreatSwordB_ba01", 0);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_SwordB", pGameObject), E_FAIL);
+
+	pGameObject = m_pSword[2] = CSword::Create(m_pGraphicDev, L"SK_NormalHalberdB", 0);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_Halberd", pGameObject), E_FAIL);
 
-	//m_pSword->Set_Enable(false);
+
+	for( int i=0; i>3 ; i++)
+		m_pSword[i]->Set_Enable(false);
 	//m_pHalberd->Set_Enable(false);
 	//m_pHalberd->Set_EquipObject(L"Player");
 	/*
@@ -1598,10 +1610,16 @@ void CPlayer::PlayerUI()
 	}
 	if (m_pKeyMgr->KeyDown(KEY_I))
 	{
-		//m_InventoryVec.push_back(make_pair(L"¿ÕÀÇ´ë°Ë",1));
 		m_eCurState = OBJ_IDLE;
 		m_pInvenSub->ChangeEnable();
 		m_pInven->ChangeEnable();
+		m_bIsLockOn = !m_bIsLockOn;
+	}
+	
+	if (m_pKeyMgr->KeyDown(KEY_O))
+	{
+		m_eCurState = OBJ_IDLE;
+		m_pPortal->ChangeEnable();
 		m_bIsLockOn = !m_bIsLockOn;
 	}
 
@@ -1632,16 +1650,25 @@ void CPlayer::PlayerUI()
 				{
 					if (wstrItem.find(L"¿ÕÀÇ") != wstring::npos)
 					{
-						m_pSword->Set_Enable(true);
-						m_pHalberd->Set_Enable(false);
+						m_pSword[0]->Set_Enable(true);
+						m_pSword[1]->Set_Enable(false);
+						m_pSword[2]->Set_Enable(false);
 
 					}
-					else
+					else if (wstrItem.find(L"±â»çÀÇ") != wstring::npos)
 					{
-						m_pSword->Set_Enable(false);
-						m_pHalberd->Set_Enable(true);
+						m_pSword[0]->Set_Enable(false);
+						m_pSword[1]->Set_Enable(true);
+						m_pSword[2]->Set_Enable(false);
 
 					}
+					else if (wstrItem.find(L"º´»çÀÇ") != wstring::npos)
+					{
+						m_pSword[0]->Set_Enable(false);
+						m_pSword[1]->Set_Enable(false);
+						m_pSword[2]->Set_Enable(true);
+					}
+
 				}
 			}
 		}
