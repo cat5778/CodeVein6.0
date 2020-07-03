@@ -392,7 +392,7 @@ _bool CLoading::Loading_Basic()
 		RESOURCE_STAGE,
 		L"Number",
 		Engine::TEX_NORMAL,
-		L"../../Resource/Texture/Number/%d.png",11),
+		L"../../Resource/Texture/Number/%d.tga",11),
 		E_FAIL);
 
 	FAILED_CHECK_RETURN(Engine::Ready_Meshes(m_pGraphicDev,

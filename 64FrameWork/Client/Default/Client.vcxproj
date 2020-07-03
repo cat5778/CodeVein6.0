@@ -188,6 +188,8 @@
     <ClInclude Include="..\Code\Gauge.h" />
     <ClInclude Include="..\Code\Halberd.h" />
     <ClInclude Include="..\Code\Image.h" />
+    <ClInclude Include="..\Code\Inven.h" />
+    <ClInclude Include="..\Code\InvenSub.h" />
     <ClInclude Include="..\Code\KeyMgr.h" />
     <ClInclude Include="..\Code\Loading.h" />
     <ClInclude Include="..\Code\LockOn.h" />
@@ -235,6 +237,8 @@
     <ClCompile Include="..\Code\Gauge.cpp" />
     <ClCompile Include="..\Code\Halberd.cpp" />
     <ClCompile Include="..\Code\Image.cpp" />
+    <ClCompile Include="..\Code\Inven.cpp" />
+    <ClCompile Include="..\Code\InvenSub.cpp" />
     <ClCompile Include="..\Code\KeyMgr.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\LockOn.cpp" />

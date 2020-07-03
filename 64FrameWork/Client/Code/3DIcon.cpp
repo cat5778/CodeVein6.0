@@ -178,34 +178,34 @@ void C3DIcon::Set_Number(_uint uiNumber)
 
 void C3DIcon::TestPos()
 {
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_LEFT))
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_LEFT))
 	{
 		m_vPos.x -= 0.005f;
 		cout << "X=" << m_vPos.x << endl;
 	}
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_RIGHT))
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_RIGHT))
 	{
 		m_vPos.x += 0.005f;
 		cout << "X=" << m_vPos.x << endl;
 
 	}
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_UP))
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_UP))
 	{
 		m_vPos.y += 0.005f;
 		cout << "Y=" << m_vPos.y << endl;
 
 	}
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_DOWN))
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_DOWN))
 	{
 		m_vPos.y -= 0.005f;
 		cout << "Y=" << m_vPos.y << endl;
 	}
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_I))
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_I))
 	{
 		m_vPos.z += 0.005f;
 		cout <<"Z=" <<m_vPos.z << endl;
 	}
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_O))
+	if (CKeyMgr::GetInstance()->KeyPressing(KEY_O))
 	{
 		m_vPos.z -= 0.01f;
 		cout << "Z=" << m_vPos.z << endl;

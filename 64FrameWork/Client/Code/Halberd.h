@@ -32,9 +32,11 @@ private:
 
 public:
 
+	void					Set_EquipObject(wstring wstrObjName);
 	_bool					Get_Equip() { return m_bIsEquip; }
 	void					Set_Equip(_bool bIsEquip);
 	void					Set_Throw();
+
 
 private:
 	Engine::CTransform*		m_pTransformCom = nullptr;

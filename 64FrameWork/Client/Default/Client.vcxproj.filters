@@ -166,6 +166,9 @@
     <Filter Include="02. GameObejct\02. Public\05. UI\3DUI\Number">
       <UniqueIdentifier>{127f0500-f168-4d5c-9d3a-1adcbee2ef64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObejct\02. Public\05. UI\3DUI\Inventory">
+      <UniqueIdentifier>{5678125d-fb32-44e2-9c55-2d04744cd582}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -303,6 +306,12 @@
     <ClInclude Include="..\Code\3DNum.h">
       <Filter>02. GameObejct\02. Public\05. UI\3DUI\Number</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\InvenSub.h">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Inven.h">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Inventory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -436,6 +445,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\3DNum.cpp">
       <Filter>02. GameObejct\02. Public\05. UI\3DUI\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\InvenSub.cpp">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Inven.cpp">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Inventory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

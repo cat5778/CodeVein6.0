@@ -30,7 +30,7 @@ public:
 
 
 public:
-	void				ChangeEnable();
+	virtual void		ChangeEnable();
 	virtual void		ChangeEnable(_bool bIsEnable);
 	void				InteractionUI();
 	_bool				IsOn() { return m_bIsOn; }

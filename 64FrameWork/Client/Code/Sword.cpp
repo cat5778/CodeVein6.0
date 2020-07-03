@@ -135,7 +135,7 @@ HRESULT CSword::Add_Component(void)
 {
 	Engine::CComponent*		pComponent = nullptr;
 
-	pComponent = m_pMeshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::Clone(RESOURCE_STAGE, L"SM_NormalGreatSwordA_ba01"));
+	pComponent = m_pMeshCom = dynamic_cast<Engine::CStaticMesh*>(Engine::Clone(RESOURCE_STAGE, L"SM_NormalGreatSwordB_ba01"));
 	NULL_CHECK_RETURN(pComponent, E_FAIL);
 	m_pComponentMap[Engine::ID_STATIC].emplace(L"Com_Mesh", pComponent);
 

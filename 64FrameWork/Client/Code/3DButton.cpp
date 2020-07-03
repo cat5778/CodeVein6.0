@@ -204,6 +204,30 @@ void C3DButton::Set_ButtonPos()
 	}
 		break;
 	case UI_INVEN:
+		switch (m_uiButtonIdx)
+		{
+		case LB_MENU_1:
+			m_vPos = { -0.25f,0.25f,-0.001f };
+			break;
+		case LB_MENU_2:
+			m_vPos = { 0.f,0.25f,-0.001f };
+			break;
+		case LB_MENU_3:
+			m_vPos = { 0.25f,0.25f,-0.001f };
+			break;
+		case LB_MENU_4:
+			m_vPos = { -0.25f,0.0f,-0.01f };
+			break;
+		case LB_MENU_5:
+			m_vPos = { 0.f,0.f,-0.001f };
+			break;
+		case LB_MENU_6:
+			m_vPos = { 0.25f,0.f,-0.001f };
+			break;
+		default:
+			m_uiButtonIdx = 0;
+			break;
+		}
 		break;
 	case UI_PORTAL:
 		break;
@@ -280,12 +304,12 @@ void C3DButton::TestPos()
 {
 	if (CKeyMgr::GetInstance()->KeyDown(KEY_LEFT))
 	{
-		m_vPos.x -= 0.005f;
+		m_vPos.x -= 0.1f;
 		cout << "X=" << m_vPos.x << endl;
 	}
 	if (CKeyMgr::GetInstance()->KeyDown(KEY_RIGHT))
 	{
-		m_vPos.x += 0.005f;
+		m_vPos.x += 0.1f;
 		cout << "X=" << m_vPos.x << endl;
 
 	}
