@@ -221,13 +221,34 @@ void CDynamicObject::MoveAni(_float fTimeDelta, _float fMinRatio, _float fMaxRat
 	if (fCurRatio >= fMinRatio && fCurRatio <= fMaxRatio)
 	{
 		vPos = Get_Pos();
-		if(!bIsJump)
-			m_pNaviCom->Move_OnNaviMesh(&Get_Pos(), &(vTempDir * fSpeed* fTimeDelta), &vOutPos);
-		else
-			m_pNaviCom->Jump_OnNaviMesh(&Get_Pos(), &(vTempDir * fSpeed* fTimeDelta), &vOutPos);
 
-		
-		m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
+		_vec3 vDivPos, vDivDir;
+		vDivDir = vDir*0.1f;
+		vDivPos = vPos;
+
+		for (int i = 0; i < 10; i++)
+		{
+			if(!bIsJump)
+				m_pNaviCom->Move_OnNaviMesh(&Get_Pos(), &(vTempDir * fSpeed* fTimeDelta), &vOutPos);
+			else
+				m_pNaviCom->Jump_OnNaviMesh(&Get_Pos(), &(vTempDir * fSpeed* fTimeDelta), &vOutPos);
+
+			vDivPos = vOutPos;
+		}
+		m_pTransformCom->Set_Pos(vDivPos.x, vDivPos.y, vDivPos.z);
+
+
+
+
+
+		//vPos = Get_Pos();
+		//if(!bIsJump)
+		//	m_pNaviCom->Move_OnNaviMesh(&Get_Pos(), &(vTempDir * fSpeed* fTimeDelta), &vOutPos);
+		//else
+		//	m_pNaviCom->Jump_OnNaviMesh(&Get_Pos(), &(vTempDir * fSpeed* fTimeDelta), &vOutPos);
+
+		//
+		//m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
 
 	}
 }

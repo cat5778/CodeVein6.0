@@ -1,52 +1,81 @@
 #include "stdafx.h"
-#include "ShopSub.h"
+#include "InvenInfo.h"
 #include "3DButton.h"
 #include "Export_Function.h"
 #include "ThirdPersonCamera.h"
 #include "Player.h"
 #include "Image.h"
-CShopSub::CShopSub(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight ,UISTATE eUIState)
-	:C3DUI(pGraphicDev,wstrTexName,fLength,fRotY,bIsRight,eUIState)
+#include "3DIcon.h"
+#include "DisplayWeapon.h"
+#include "Inven.h"
+CInvenInfo::CInvenInfo(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength)
+	:C3DUI(pGraphicDev,wstrTexName,fLength)
 {
-	m_wstrInstName = L"ShopSub_UI";
+	m_wstrInstName = L"InvenInfoUI";
 }
 
-CShopSub::~CShopSub(void)
+CInvenInfo::~CInvenInfo(void)
 {
 
 }
 
-HRESULT CShopSub::Ready_GameObject(void)
+HRESULT CInvenInfo::Ready_GameObject(void)
 {
+	Set_Mid();
 	C3DUI::Ready_GameObject();
+	m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
 
 	return S_OK;
 }
 
-HRESULT CShopSub::LateReady_GameObject(void)
+HRESULT CInvenInfo::LateReady_GameObject(void)
 {
-
 	C3DUI::LateReady_GameObject();
 
+	Engine::CLayer* pLayer = Engine::Get_Layer(L"UI");
+	CGameObject* pGameObject = nullptr;
 
+	pGameObject = m_pWeapon[0] = CDisplayWeapon::Create(m_pGraphicDev, L"SM_NormalGreatSwordA_ba01", 0);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Display_SwordA", pGameObject), E_FAIL);
+
+	pGameObject = m_pWeapon[1] = CDisplayWeapon::Create(m_pGraphicDev, L"SM_NormalGreatSwordB_ba01", 0);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Display_SwordB", pGameObject), E_FAIL);
+
+	pGameObject = m_pWeapon[2] = CDisplayWeapon::Create(m_pGraphicDev, L"SK_NormalHalberdB", 0);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Display_Halberd", pGameObject), E_FAIL);
+
+
+	m_pInven = dynamic_cast<CInven*> (Engine::Get_GameObject(L"UI", L"InvenUI"));
 	return S_OK;
 }
 
-_int CShopSub::Update_GameObject(const _float& fTimeDelta)
+_int CInvenInfo::Update_GameObject(const _float& fTimeDelta)
 {
 	if (!m_bIsOn)
 		return 0;
-
-	if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
+	
+	if (m_pInven->Get_ItemName().find(L"왕의") != wstring::npos)
 	{
-		m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
-	}
-	else
-	{
-		if (Engine::Get_DIKeyState(DIK_UP) || Engine::Get_DIKeyState(DIK_DOWN))
-			m_pTransformCom->Set_Scale(m_vScale.x*1.5f, m_vScale.y*1.5f, m_vScale.z*1.5f);
-	}
+		m_pWeapon[0]->Set_Enable(true);
+		m_pWeapon[1]->Set_Enable(false);
+		m_pWeapon[2]->Set_Enable(false);
 
+	}
+	else if (m_pInven->Get_ItemName().find(L"기사의") != wstring::npos)
+	{
+		m_pWeapon[0]->Set_Enable(false);
+		m_pWeapon[1]->Set_Enable(true);
+		m_pWeapon[2]->Set_Enable(false);
+	}
+	else if (m_pInven->Get_ItemName().find(L"병사의") != wstring::npos)
+	{
+		m_pWeapon[0]->Set_Enable(false);
+		m_pWeapon[1]->Set_Enable(false);
+		m_pWeapon[2]->Set_Enable(true);
+	}
 	Engine::CGameObject::Update_GameObject(fTimeDelta);
 	BillBoard();
 	m_pRendererCom->Add_RenderGroup(Engine::RENDER_ALPHA, this);
@@ -54,7 +83,7 @@ _int CShopSub::Update_GameObject(const _float& fTimeDelta)
 	return 0;
 }
 
-void CShopSub::Render_GameObject(void)
+void CInvenInfo::Render_GameObject(void)
 {
 
 	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
@@ -78,7 +107,7 @@ void CShopSub::Render_GameObject(void)
 	Safe_Release(pEffect);
 }
 
-HRESULT CShopSub::Add_Component(void)
+HRESULT CInvenInfo::Add_Component(void)
 {
 	Engine::CComponent*		pComponent = nullptr;
 
@@ -108,7 +137,7 @@ HRESULT CShopSub::Add_Component(void)
 
 
 
-HRESULT CShopSub::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
+HRESULT CInvenInfo::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 {
 	_matrix			matWorld, matView, matProj;
 
@@ -128,31 +157,28 @@ HRESULT CShopSub::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 	return S_OK;
 }
 
-wstring CShopSub::Get_ItemName()
-{
-	wstring wstrItem;
-	switch (m_pButton->Get_ButtonIdx())
-	{
-	case 0:
-		wstrItem = L"구매";
-		break;
-	case 1:
-		wstrItem = L"판매";
-		break;
-	case 2:
-		wstrItem = L"강화";
-		break;
-	default:
-		wstrItem = L"";
-		break;
-	} 
 
-	return wstrItem;
+
+void CInvenInfo::ChangeEnable(_bool bIsEnable)
+{
+	m_bIsOn = bIsEnable;
+	for (int i = 0; i < 3; i++)
+	{
+		m_pWeapon[i]->Set_Enable(false);
+	}
+
 }
 
-CShopSub* CShopSub::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsLeft, UISTATE eUIState)
+void CInvenInfo::ChangeEnable()
 {
-	CShopSub*	pInstance = new CShopSub(pGraphicDev, wstrTexName, fLength,fRotY,bIsLeft, eUIState);
+	m_bIsOn = !m_bIsOn;
+}
+
+
+
+CInvenInfo * CInvenInfo::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength)
+{
+	CInvenInfo*	pInstance = new CInvenInfo(pGraphicDev, wstrTexName, fLength);
 
 	if (FAILED(pInstance->Ready_GameObject()))
 		Engine::Safe_Release(pInstance);
@@ -160,10 +186,8 @@ CShopSub* CShopSub::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _
 	return pInstance;
 }
 
-void CShopSub::Free(void)
+void CInvenInfo::Free(void)
 {
-
-
 	C3DUI::Free();
 }
 

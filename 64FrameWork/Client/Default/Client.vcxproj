@@ -181,6 +181,7 @@
     <ClInclude Include="..\Code\CocoonDevil.h" />
     <ClInclude Include="..\Code\ColliderManager.h" />
     <ClInclude Include="..\Code\Davis.h" />
+    <ClInclude Include="..\Code\DisplayWeapon.h" />
     <ClInclude Include="..\Code\DynamicCamera.h" />
     <ClInclude Include="..\Code\DynamicObject.h" />
     <ClInclude Include="..\Code\Effect.h" />
@@ -188,6 +189,9 @@
     <ClInclude Include="..\Code\Gauge.h" />
     <ClInclude Include="..\Code\Halberd.h" />
     <ClInclude Include="..\Code\Image.h" />
+    <ClInclude Include="..\Code\Inven.h" />
+    <ClInclude Include="..\Code\InvenInfo.h" />
+    <ClInclude Include="..\Code\InvenSub.h" />
     <ClInclude Include="..\Code\KeyMgr.h" />
     <ClInclude Include="..\Code\Loading.h" />
     <ClInclude Include="..\Code\LockOn.h" />
@@ -195,6 +199,8 @@
     <ClInclude Include="..\Code\MainApp.h" />
     <ClInclude Include="..\Code\Monster.h" />
     <ClInclude Include="..\Code\Player.h" />
+    <ClInclude Include="..\Code\Portal.h" />
+    <ClInclude Include="..\Code\PortalSub.h" />
     <ClInclude Include="..\Code\Projectile.h" />
     <ClInclude Include="..\Code\RedDevil.h" />
     <ClInclude Include="..\Code\RussianHat.h" />
@@ -228,6 +234,7 @@
     <ClCompile Include="..\Code\CocoonDevil.cpp" />
     <ClCompile Include="..\Code\ColliderManager.cpp" />
     <ClCompile Include="..\Code\Davis.cpp" />
+    <ClCompile Include="..\Code\DisplayWeapon.cpp" />
     <ClCompile Include="..\Code\DynamicCamera.cpp" />
     <ClCompile Include="..\Code\DynamicObject.cpp" />
     <ClCompile Include="..\Code\Effect.cpp" />
@@ -235,6 +242,9 @@
     <ClCompile Include="..\Code\Gauge.cpp" />
     <ClCompile Include="..\Code\Halberd.cpp" />
     <ClCompile Include="..\Code\Image.cpp" />
+    <ClCompile Include="..\Code\Inven.cpp" />
+    <ClCompile Include="..\Code\InvenInfo.cpp" />
+    <ClCompile Include="..\Code\InvenSub.cpp" />
     <ClCompile Include="..\Code\KeyMgr.cpp" />
     <ClCompile Include="..\Code\Loading.cpp" />
     <ClCompile Include="..\Code\LockOn.cpp" />
@@ -242,6 +252,8 @@
     <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
+    <ClCompile Include="..\Code\Portal.cpp" />
+    <ClCompile Include="..\Code\PortalSub.cpp" />
     <ClCompile Include="..\Code\Projectile.cpp" />
     <ClCompile Include="..\Code\RedDevil.cpp" />
     <ClCompile Include="..\Code\RussianHat.cpp" />

@@ -43,10 +43,10 @@ _int CHalberd::Update_GameObject(const _float& fTimeDelta)
 
 		m_pParentBoneMatrix = &pBone->CombinedTransformationMatrix;
 
-		Engine::CTransform*	pPlayerTransCom = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", m_wstrEquipName.c_str(), L"Com_Transform", Engine::ID_DYNAMIC));
-		NULL_CHECK_RETURN(pPlayerTransCom, 0);
+		Engine::CTransform*	pObjectTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", m_wstrEquipName.c_str(), L"Com_Transform", Engine::ID_DYNAMIC));
+		NULL_CHECK_RETURN(pObjectTransform, 0);
 
-		m_pParentWorldMatrix = pPlayerTransCom->Get_WorldMatrixPointer();
+		m_pParentWorldMatrix = pObjectTransform->Get_WorldMatrixPointer();
 		m_bIsEquip = true;
 	}
 
@@ -181,6 +181,11 @@ HRESULT CHalberd::Add_Component(void)
 	return S_OK;
 }
 
+
+void CHalberd::Set_EquipObject(wstring wstrObjName)
+{
+	m_wstrEquipName = wstrObjName;
+}
 
 void CHalberd::Set_Equip(_bool bIsEquip)
 {

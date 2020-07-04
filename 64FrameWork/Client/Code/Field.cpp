@@ -50,6 +50,7 @@ HRESULT CField::LateReady_Scene(void)
 	//Engine::CCamera* pCamera = dynamic_cast<Engine::CCamera*>(Engine::Get_GameObject(L"GameLogic", L"DynamicCamera"));
 	//NULL_CHECK_RETURN(pCamera, E_FAIL);
 	//Engine::Get_Renderer()->Set_Perspective(*pCamera->Get_Projection());
+	dynamic_cast<CPlayer*>(Engine::Get_GameObject(L"GameLogic", L"Player"))->Set_InvenVec(Get_Inven());
 
 	return S_OK;
 }
@@ -117,11 +118,6 @@ HRESULT CField::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	pGameObject = CPlayer::Create(m_pGraphicDev,0, m_uiStageIdx);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
-
-	 //Sword
-	pGameObject = CSword::Create(m_pGraphicDev, 0);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Sword", pGameObject), E_FAIL);
 
 
 	pGameObject = CRussianHat::Create(m_pGraphicDev,L"RussianHat",0,m_uiStageIdx);

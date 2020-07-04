@@ -10,6 +10,12 @@
 #include "3DButton.h"
 #include "Shop.h"
 #include "ShopSub.h"
+#include "InvenSub.h"
+#include "Inven.h"
+#include "Sword.h"
+#include "Portal.h"
+#include "PortalSub.h"
+
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
 {
@@ -124,7 +130,44 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	pGameObject = m_pShoplist = CShop::Create(m_pGraphicDev, L"ShopUI3", 2.f, -40.f, false, UI_SHOP);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopUI", pGameObject), E_FAIL);
-/*
+	
+
+	pGameObject = m_pInven = CInven::Create(m_pGraphicDev, L"EmptyFrame", 2.f, -40.f, false, UI_INVEN);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"InvenUI", pGameObject), E_FAIL);
+
+	pGameObject = m_pInvenSub = CInvenSub::Create(m_pGraphicDev, L"InvenFrame", 2.f, 40.f, true, UI_INVEN_SUB);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"InvenSubUI", pGameObject), E_FAIL);
+
+	pGameObject = m_pPortal = CPortal::Create(m_pGraphicDev, L"PortalEmpty", 2.f, -40.f, false, UI_PORTAL);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"PortalUI", pGameObject), E_FAIL);
+
+	pGameObject = m_pPortalSub = CPortalSub::Create(m_pGraphicDev, L"PortalUI", 2.f, 40.f, true, UI_PORTAL_SUB);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"PortalSubUI", pGameObject), E_FAIL);
+
+	pLayer = Engine::Get_Layer(L"GameLogic");
+	//// //Sword2
+	pGameObject = m_pSword[0] = CSword::Create(m_pGraphicDev, L"SM_NormalGreatSwordA_ba01", 0);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_SwordA", pGameObject), E_FAIL);
+
+	pGameObject = m_pSword[1]=CSword::Create(m_pGraphicDev, L"SM_NormalGreatSwordB_ba01", 0);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_SwordB", pGameObject), E_FAIL);
+
+	pGameObject = m_pSword[2] = CSword::Create(m_pGraphicDev, L"SK_NormalHalberdB", 0);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player_Halberd", pGameObject), E_FAIL);
+
+
+	for( int i=0; i>3 ; i++)
+		m_pSword[i]->Set_Enable(false);
+	//m_pHalberd->Set_Enable(false);
+	//m_pHalberd->Set_EquipObject(L"Player");
+	/*
 	pGameObject  = C3DButton::Create(m_pGraphicDev, L"Select", 1.9f, 40.f);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Shop_Sub_Select", pGameObject), E_FAIL);
@@ -136,36 +179,9 @@ HRESULT CPlayer::LateReady_GameObject(void)
 
 _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 {
-	if (m_pKeyMgr->KeyDown(KEY_X))
-	{
-		m_eCurState = OBJ_IDLE;
-		Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
-		if (pDavisTransform == nullptr)
-			return 0;
-		_vec3 vDist = *pDavisTransform->Get_Info(Engine::INFO_POS) - *m_pTransformCom->Get_Info(Engine::INFO_POS);
-		_float fLength = D3DXVec3Length(&vDist);
-		if (fLength < 1.5f)
-		{
-			m_pShopSub->ChangeEnable(true);
-			m_pShoplist->ChangeEnable(true);
-			m_bIsShop = true;
-			m_bIsLockOn = true;
-		}
 
-	}
-	if (m_bIsShop)
-	{
-		Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
-		_vec3 vDist = *pDavisTransform->Get_Info(Engine::INFO_POS) - *m_pTransformCom->Get_Info(Engine::INFO_POS);
-		_float fLength = D3DXVec3Length(&vDist);
-		if (fLength >= 1.5f)
-		{
-			m_pShopSub->ChangeEnable(false);
-			m_pShoplist->ChangeEnable(false);
-			m_bIsShop = false;
-		}
-	}
-
+	PlayerUI();
+	
 	UpdateGague(fTimeDelta);
 
 	m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_ATTACK, false);
@@ -500,25 +516,7 @@ void CPlayer::Key_Input(const _float& fTimeDelta)
 
 	}
 
-	if (m_pKeyMgr->KeyDown(KEY_RETURN))
-	{
-		if (m_pShoplist->IsOn())
-		{
-			wstring wstrItem = m_pShoplist->Get_ItemName();
-			if (wstrItem.find(L"의") != wstring::npos)
-			{
-				if (m_pShopSub->Get_ItemName().find(L"구매") != wstring::npos)
-					AddItem_Inventory(wstrItem);
-				else if (m_pShopSub->Get_ItemName().find(L"판매") != wstring::npos)
-					DeleteItem_Inventory(wstrItem);
-				else if (m_pShopSub->Get_ItemName().find(L"강화") != wstring::npos)
-					EnhanceItem_Inventory(wstrItem);
-
-			}
-
-		}
-	}
-
+	
 
 	if (m_pCameraTransformCom != nullptr)
 	{
@@ -1076,6 +1074,10 @@ void CPlayer::StateMachine()
 
 		}
 			break;
+		case OBJ_CHECKPOINT_START:
+			m_pMeshCom->Set_AnimationSet(8);
+
+			break;
 		case OBJ_END:
 			break;
 		default:
@@ -1121,7 +1123,9 @@ void CPlayer::CheckMoveMesh(_float fTimeDelta, Engine::CTransform * pTransform, 
 			m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir * fSpeed* fTimeDelta), &vOutPos);
 		else
 			m_pNaviCom->Move_OnNaviMesh(&vPos, &(-vDir * fSpeed* fTimeDelta), &vOutPos);
-		
+		m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
+			
+
 	}
 	else
 	{
@@ -1135,9 +1139,9 @@ void CPlayer::CheckMoveMesh(_float fTimeDelta, Engine::CTransform * pTransform, 
 		vDir += vDiagonalDir;
 		D3DXVec3Normalize(&vDir, &vDir);
 		m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir * fSpeed* fTimeDelta), &vOutPos);
-	
+		m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
+
 	}
-	m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
 
 }
 
@@ -1500,7 +1504,8 @@ void CPlayer::Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage)
 	else if (cosf(D3DXToRadian(fAngle)) <= -fCos60)
 		m_dwHurtDirectionFlag |= RIGHT;
 
-	cout << m_dwHurtDirectionFlag << endl;
+	//cout << m_dwHurtDirectionFlag << endl;
+	m_fCurHP -= 10.f;
 
 
 	m_vKnockBackDir = vDir;
@@ -1515,7 +1520,7 @@ void CPlayer::Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage)
 	}
 	switch (m_dwHurtDirectionFlag)	
 	{
-
+		
 		case DIR_F:
 			bIsStrongAttack ? m_eCurState = OBJ_STRONG_HURT_F	: m_eCurState = OBJ_HURT_F;
 			break;
@@ -1587,6 +1592,113 @@ void CPlayer::SetColliderEnable(_float fMin, _float fMax)
 		m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_ATTACK, true);
 	else
 		m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_ATTACK, false);
+
+}
+
+void CPlayer::PlayerUI()
+{
+	if (m_pKeyMgr->KeyDown(KEY_X))
+	{
+		m_eCurState = OBJ_IDLE;
+		Engine::CTransform* pDavisTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Davis_0", L"Com_Transform", Engine::ID_DYNAMIC));
+		if (pDavisTransform == nullptr)
+			return;
+		_vec3 vDist = *pDavisTransform->Get_Info(Engine::INFO_POS) - *m_pTransformCom->Get_Info(Engine::INFO_POS);
+		_float fLength = D3DXVec3Length(&vDist);
+		if (fLength < 1.5f)
+		{
+			m_pShopSub->ChangeEnable(true);
+			m_pShoplist->ChangeEnable(true);
+			m_bIsLockOn = true;
+		}
+		else
+		{
+			m_pShopSub->ChangeEnable(false);
+			m_pShoplist->ChangeEnable(false);
+			m_bIsLockOn = false;
+
+		}
+	}
+	if (m_pKeyMgr->KeyDown(KEY_I))
+	{
+		m_eCurState = OBJ_IDLE;
+		m_pInvenSub->ChangeEnable();
+		m_pInven->ChangeEnable();
+		m_bIsLockOn = !m_bIsLockOn;
+	}
+	
+	if (m_pKeyMgr->KeyDown(KEY_O))
+	{
+		m_eCurState = OBJ_IDLE;
+		m_pPortal->ChangeEnable();
+		m_pPortalSub->ChangeEnable();
+		m_bIsLockOn = !m_bIsLockOn;
+	}
+
+	if (m_pKeyMgr->KeyDown(KEY_RETURN))
+	{
+		wstring wstrItem;
+		if (m_pShoplist->IsOn())
+		{
+			wstrItem = m_pShoplist->Get_ItemName();
+			if (wstrItem.find(L"의") != wstring::npos)
+			{
+				if (m_pShopSub->Get_ItemName().find(L"구매") != wstring::npos)
+					AddItem_Inventory(wstrItem);
+				else if (m_pShopSub->Get_ItemName().find(L"판매") != wstring::npos)
+					DeleteItem_Inventory(wstrItem);
+				else if (m_pShopSub->Get_ItemName().find(L"강화") != wstring::npos)
+					EnhanceItem_Inventory(wstrItem);
+
+			}
+
+		}
+		else if (m_pInven->IsOn())
+		{
+			wstrItem = m_pInven->Get_ItemName();
+			if (wstrItem.find(L"의") != wstring::npos)
+			{
+				if (m_pInvenSub->Get_ItemName().find(L"착용") != wstring::npos)
+				{
+					if (wstrItem.find(L"왕의") != wstring::npos)
+					{
+						m_pSword[0]->Set_Enable(true);
+						m_pSword[1]->Set_Enable(false);
+						m_pSword[2]->Set_Enable(false);
+
+					}
+					else if (wstrItem.find(L"기사의") != wstring::npos)
+					{
+						m_pSword[0]->Set_Enable(false);
+						m_pSword[1]->Set_Enable(true);
+						m_pSword[2]->Set_Enable(false);
+
+					}
+					else if (wstrItem.find(L"병사의") != wstring::npos)
+					{
+						m_pSword[0]->Set_Enable(false);
+						m_pSword[1]->Set_Enable(false);
+						m_pSword[2]->Set_Enable(true);
+					}
+
+				}
+			}
+		}
+		else if (m_pPortal->IsOn())
+		{
+			
+			if (m_pPortal->Get_PortalIdx() == 1)
+			{
+				if (m_pPortalSub->Get_ItemName().find(L"이동") != wstring::npos)
+				{
+					m_bIsSceneChangeFlag = true;
+				}
+
+			}
+		}
+
+	}
+
 
 }
 
@@ -1684,6 +1796,7 @@ void CPlayer::EnhanceItem_Inventory(wstring wstrName)
 	}
 
 	_bool	bIsFind = false;
+	
 	for (auto &Item : m_InventoryVec) //강화된아이템추가
 	{
 		if (Item.first.compare(wstrEnhance) ==0)
@@ -1692,11 +1805,8 @@ void CPlayer::EnhanceItem_Inventory(wstring wstrName)
 			bIsFind = true;
 		}
 	}
-
-
 	if (!bIsFind)
 		m_InventoryVec.push_back(make_pair(wstrEnhance, 1));
-
 
 
 	auto InvenItr = m_InventoryVec.begin();
@@ -1707,6 +1817,8 @@ void CPlayer::EnhanceItem_Inventory(wstring wstrName)
 			Item.second--;
 			if (Item.second <= 0)
 			{
+				wstring wstrTemp = InvenItr->first;
+				wcout << wstrTemp << L"erase " << endl;
 				InvenItr = m_InventoryVec.erase(InvenItr);
 				break;
 			}

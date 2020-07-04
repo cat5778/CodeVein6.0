@@ -1,29 +1,31 @@
 #include "stdafx.h"
-#include "ShopSub.h"
+#include "InvenSub.h"
 #include "3DButton.h"
 #include "Export_Function.h"
 #include "ThirdPersonCamera.h"
 #include "Player.h"
 #include "Image.h"
-CShopSub::CShopSub(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight ,UISTATE eUIState)
+
+CInvenSub::CInvenSub(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight ,UISTATE eUIState)
 	:C3DUI(pGraphicDev,wstrTexName,fLength,fRotY,bIsRight,eUIState)
 {
-	m_wstrInstName = L"ShopSub_UI";
+	m_wstrInstName = L"InvenSub_UI";
 }
 
-CShopSub::~CShopSub(void)
+CInvenSub::~CInvenSub(void)
 {
 
 }
 
-HRESULT CShopSub::Ready_GameObject(void)
+HRESULT CInvenSub::Ready_GameObject(void)
 {
 	C3DUI::Ready_GameObject();
+	m_fGap = 0.45f;
 
 	return S_OK;
 }
 
-HRESULT CShopSub::LateReady_GameObject(void)
+HRESULT CInvenSub::LateReady_GameObject(void)
 {
 
 	C3DUI::LateReady_GameObject();
@@ -32,11 +34,11 @@ HRESULT CShopSub::LateReady_GameObject(void)
 	return S_OK;
 }
 
-_int CShopSub::Update_GameObject(const _float& fTimeDelta)
+_int CInvenSub::Update_GameObject(const _float& fTimeDelta)
 {
 	if (!m_bIsOn)
 		return 0;
-
+	m_fGap = 0.45f;
 	if (Engine::Get_DIKeyState(DIK_LEFT) || Engine::Get_DIKeyState(DIK_RIGHT))
 	{
 		m_pTransformCom->Set_Scale(m_vScale.x, m_vScale.y, m_vScale.z);
@@ -54,7 +56,7 @@ _int CShopSub::Update_GameObject(const _float& fTimeDelta)
 	return 0;
 }
 
-void CShopSub::Render_GameObject(void)
+void CInvenSub::Render_GameObject(void)
 {
 
 	LPD3DXEFFECT	pEffect = m_pShaderCom->Get_EffectHandle();
@@ -78,7 +80,7 @@ void CShopSub::Render_GameObject(void)
 	Safe_Release(pEffect);
 }
 
-HRESULT CShopSub::Add_Component(void)
+HRESULT CInvenSub::Add_Component(void)
 {
 	Engine::CComponent*		pComponent = nullptr;
 
@@ -108,7 +110,7 @@ HRESULT CShopSub::Add_Component(void)
 
 
 
-HRESULT CShopSub::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
+HRESULT CInvenSub::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 {
 	_matrix			matWorld, matView, matProj;
 
@@ -128,31 +130,22 @@ HRESULT CShopSub::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 	return S_OK;
 }
 
-wstring CShopSub::Get_ItemName()
+wstring CInvenSub::Get_ItemName()
 {
 	wstring wstrItem;
 	switch (m_pButton->Get_ButtonIdx())
 	{
 	case 0:
-		wstrItem = L"구매";
-		break;
-	case 1:
-		wstrItem = L"판매";
-		break;
-	case 2:
-		wstrItem = L"강화";
-		break;
-	default:
-		wstrItem = L"";
+		wstrItem = L"착용";
 		break;
 	} 
 
 	return wstrItem;
 }
 
-CShopSub* CShopSub::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsLeft, UISTATE eUIState)
+CInvenSub* CInvenSub::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsLeft, UISTATE eUIState)
 {
-	CShopSub*	pInstance = new CShopSub(pGraphicDev, wstrTexName, fLength,fRotY,bIsLeft, eUIState);
+	CInvenSub*	pInstance = new CInvenSub(pGraphicDev, wstrTexName, fLength,fRotY,bIsLeft, eUIState);
 
 	if (FAILED(pInstance->Ready_GameObject()))
 		Engine::Safe_Release(pInstance);
@@ -160,10 +153,8 @@ CShopSub* CShopSub::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _
 	return pInstance;
 }
 
-void CShopSub::Free(void)
+void CInvenSub::Free(void)
 {
-
-
 	C3DUI::Free();
 }
 

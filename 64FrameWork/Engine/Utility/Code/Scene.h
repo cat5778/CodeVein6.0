@@ -19,6 +19,9 @@ public:
 	CGameObject*				Get_GameObject(const _tchar * pLayerTag,
 												const _tchar * pObjTag);
 	CLayer*						Get_Layer(const _tchar* pLayerTag);
+	void						Set_Inven(vector<pair<wstring, _uint>> InvenVec);
+	vector<pair<wstring, _uint>>Get_Inven();
+
 public:
 	virtual HRESULT				Ready_Scene(void);
 	virtual HRESULT				LateReady_Scene(void);
@@ -28,9 +31,10 @@ public:
 	virtual void				Set_SceneChange(const bool& flag);
 
 protected:
-	LPDIRECT3DDEVICE9			m_pGraphicDev;
-	map<wstring, CLayer*>		m_pLayerMap;
-	_uint						m_uiStageIdx;
+	LPDIRECT3DDEVICE9				m_pGraphicDev;
+	map<wstring, CLayer*>			m_pLayerMap;
+	_uint							m_uiStageIdx;
+	vector<pair<wstring, _uint>>	m_InvenVec;
 protected:
 	virtual void				Free(void);
 

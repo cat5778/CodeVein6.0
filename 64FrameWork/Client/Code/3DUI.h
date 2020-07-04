@@ -19,6 +19,7 @@ class C3DUI : public Engine::CGameObject
 {
 protected:
 	explicit C3DUI(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength, _float fRotY, _bool bIsRight, UISTATE eUIState);
+	explicit C3DUI(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, _float fLength);
 	virtual ~C3DUI(void);
 
 public:
@@ -30,18 +31,20 @@ public:
 
 
 public:
-	void				ChangeEnable();
+	virtual void		ChangeEnable();
 	virtual void		ChangeEnable(_bool bIsEnable);
 	void				InteractionUI();
 	_bool				IsOn() { return m_bIsOn; }
 	virtual wstring		Get_ItemName();
+	void				Set_Mid();
+
 protected:
 	virtual HRESULT		Add_Component(void);
 	virtual HRESULT		SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 	virtual void		InsertSlot();
 	void		BillBoard();
 	void		TestPos();
-
+	
 protected:
 	Engine::CRcTex*			m_pBufferCom = nullptr;
 	Engine::CTexture*		m_pTextureCom = nullptr;
@@ -60,7 +63,9 @@ protected:
 	UISTATE					m_eUIState;
 	C3DButton*				m_pButton= nullptr;
 	_bool					m_bIsOn = false;
+	_bool					m_bIsMid = false;
 	wstring					m_wstrItem;
+	_float					m_fGap=0.3f;
 
 public:
 	static C3DUI*		Create(LPDIRECT3DDEVICE9 pGraphicDev,  wstring wstrTexName, _float fLength,_float fRotY,_bool bIsRight =true, UISTATE eUIState=UI_END);

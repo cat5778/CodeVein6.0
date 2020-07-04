@@ -57,8 +57,11 @@ _int C3DButton::Update_GameObject(const _float& fTimeDelta)
 
 
 	//TestPos();
+	_matrix			matWorld;
+	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	m_pTargetTransformCom->Get_WorldMatrix(&m_matTargetWorld);
+	m_pTransformCom->Set_WorldMatrix(&(matWorld*m_matTargetWorld));
 
-	
 
 
 	m_pRendererCom->Add_RenderGroup(Engine::RENDER_ALPHA, this);
@@ -135,12 +138,12 @@ HRESULT C3DButton::SetUp_ConstantTable(LPD3DXEFFECT& pEffect)
 	_matrix			matWorld, matView, matProj;
 
 	m_pTransformCom->Get_WorldMatrix(&matWorld);
+	//m_pTargetTransformCom->Get_WorldMatrix(&m_matTargetWorld);
 	m_pGraphicDev->GetTransform(D3DTS_VIEW, &matView);
 	m_pGraphicDev->GetTransform(D3DTS_PROJECTION, &matProj);
-	m_pTargetTransformCom->Get_WorldMatrix(&m_matTargetWorld);
 
 
-	matWorld *= m_matTargetWorld;
+	//matWorld *= m_matTargetWorld;
 	pEffect->SetMatrix("g_matWorld", &matWorld);
 	pEffect->SetMatrix("g_matView", &matView);
 	pEffect->SetMatrix("g_matProj", &matProj);
@@ -204,8 +207,34 @@ void C3DButton::Set_ButtonPos()
 	}
 		break;
 	case UI_INVEN:
+		switch (m_uiButtonIdx)
+		{
+		case LB_MENU_1:
+			m_vPos = { -0.25f,0.25f,-0.001f };
+			break;
+		case LB_MENU_2:
+			m_vPos = { 0.f,0.25f,-0.001f };
+			break;
+		case LB_MENU_3:
+			m_vPos = { 0.25f,0.25f,-0.001f };
+			break;
+		case LB_MENU_4:
+			m_vPos = { -0.25f,0.0f,-0.01f };
+			break;
+		case LB_MENU_5:
+			m_vPos = { 0.f,0.f,-0.001f };
+			break;
+		case LB_MENU_6:
+			m_vPos = { 0.25f,0.f,-0.001f };
+			break;
+		default:
+			m_uiButtonIdx = 0;
+			break;
+		}
 		break;
 	case UI_PORTAL:
+		m_pTransformCom->Set_Scale(m_vScale.x*1.125f, m_vScale.y*2.725f, m_vScale.z*1.125f);
+		m_vPos = { 0.f, 0.5f,-0.0001f };
 		break;
 	case UI_SHOP_SUB:
 	{
@@ -280,12 +309,12 @@ void C3DButton::TestPos()
 {
 	if (CKeyMgr::GetInstance()->KeyDown(KEY_LEFT))
 	{
-		m_vPos.x -= 0.005f;
+		m_vPos.x -= 0.1f;
 		cout << "X=" << m_vPos.x << endl;
 	}
 	if (CKeyMgr::GetInstance()->KeyDown(KEY_RIGHT))
 	{
-		m_vPos.x += 0.005f;
+		m_vPos.x += 0.1f;
 		cout << "X=" << m_vPos.x << endl;
 
 	}

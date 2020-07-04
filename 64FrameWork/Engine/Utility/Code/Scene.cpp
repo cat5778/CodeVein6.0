@@ -110,3 +110,13 @@ CLayer * CScene::Get_Layer(const _tchar * pLayerTag)
 
 	return iter->second;
 }
+
+void CScene::Set_Inven(vector<pair<wstring, _uint>> InvenVec)
+{
+	m_InvenVec = InvenVec;
+}
+
+vector<pair<wstring, _uint>> CScene::Get_Inven()
+{
+	return m_InvenVec;
+}

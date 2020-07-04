@@ -19,6 +19,16 @@ END
 class CThirdPersonCamera;
 class CKeyMgr;
 class C3DUI;
+class CShop;
+class CShopSub;
+class CInven;
+class CInvenSub;
+class CSword;
+class CHalberd;
+class CPortal;
+class CPortalSub;
+
+
 class CPlayer : public Engine::CGameObject
 {
 private:
@@ -38,6 +48,8 @@ public:
 	void				Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage);
 	DWORD				Get_Dodge() { return m_dwDodge_DirectionFlag; }
 	vector<pair<wstring, _uint>>*	Get_InvenVec() {return &m_InventoryVec;}
+	void							Set_InvenVec(vector<pair<wstring, _uint>> InvenVec) {m_InventoryVec = InvenVec;}
+	_bool							ChangeScene() {return m_bIsSceneChangeFlag;}
 private:
 	HRESULT				Add_Component(void);
 	void				Key_Input(const _float& fTimeDelta);
@@ -67,6 +79,8 @@ private:
 	void				KnockBack(_float fTimeDelta);
 	void				SetColliderEnable(_float fMin, _float fMax);
 
+	void				PlayerUI();
+
 	void				UpdateGague(_float fTimeDelta);
 	void				AddItem_Inventory(wstring wstrName);
 	void				DeleteItem_Inventory(wstring wstrName);
@@ -82,6 +96,7 @@ private:
 	Engine::CCollider*		m_pColliderCom = nullptr;
 	Engine::CShader*		m_pShaderCom = nullptr;
 	Engine::CColliderGroup*	m_pColliderGroupCom=nullptr;
+	_bool					m_bIsSceneChangeFlag=false;
 
 	CKeyMgr*				m_pKeyMgr = nullptr;
 	CThirdPersonCamera*		m_pCam = nullptr;
@@ -118,11 +133,16 @@ private:
 	CGauge*					m_pHPGaugeBar = nullptr;
 	CGauge*					m_pSPGauge = nullptr;
 	CGauge*					m_pSPGaugeBar = nullptr;
-	C3DUI*					m_pShoplist = nullptr;
-	C3DUI*					m_pShopSub = nullptr;
+	CShop*					m_pShoplist = nullptr;
+	CShopSub*				m_pShopSub = nullptr;
+	CInven*					m_pInven = nullptr;
+	CInvenSub*				m_pInvenSub = nullptr;
+	CPortal*				m_pPortal = nullptr;
+	CPortalSub*				m_pPortalSub = nullptr;
 
-	C3DUI*					m_pInven = nullptr;
-	C3DUI*					m_pInvenSub= nullptr;
+	//weapon
+	CSword*					m_pSword[3] = { nullptr,nullptr,nullptr };
+
 	_bool					m_bIsShop = false;
 	vector<pair<wstring, _uint>>		m_InventoryVec;
 

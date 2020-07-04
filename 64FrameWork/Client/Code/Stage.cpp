@@ -97,13 +97,14 @@ _int CStage::Update_Scene(const _float& fTimeDelta)
 
 
 
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_R))
+	if (m_pPlayer->ChangeScene())
 	{
 
 		Engine::CScene*		pScene = CField::Create(m_pGraphicDev);
 		if (pScene == nullptr)
 			return -1;
-
+		pScene->Set_Inven(*dynamic_cast<CPlayer*>(Engine::Get_GameObject(L"GameLogic", L"Player"))->Get_InvenVec());
+		
 		Engine::SetUp_Scene(pScene);
 		return iEvent;
 	}
@@ -157,7 +158,7 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	Engine::CGameObject*		pGameObject = nullptr;
 
 	//// Player
-	pGameObject = CPlayer::Create(m_pGraphicDev);
+	pGameObject = m_pPlayer = CPlayer::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
 
@@ -172,10 +173,6 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 
 
 
-	//// //Sword2
-	//pGameObject = CSword::Create(m_pGraphicDev, 0);
-	//NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	//FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Sword", pGameObject), E_FAIL);
 
 	//if (LOAD_MODE == LOAD_NOMAL2)
 	//{

@@ -1,65 +1,60 @@
 #include "stdafx.h"
-#include "Sword.h"
+#include "DisplayWeapon.h"
 
 #include "Export_Function.h"
 
-CSword::CSword(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName)
+CDisplayWeapon::CDisplayWeapon(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName)
 	: Engine::CGameObject(pGraphicDev), m_wstrMeshName(wstrMeshName)
 {
 	m_bEnable = false;
 }
 
-CSword::~CSword(void)
+CDisplayWeapon::~CDisplayWeapon(void)
 {
 
 }
 
-HRESULT CSword::Ready_GameObject(const _uint& iFlag)
+HRESULT CDisplayWeapon::Ready_GameObject(const _uint& iFlag)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 
-	m_pTransformCom->Rotation(Engine::ROT_X, D3DXToRadian(90.f));
+	//m_pTransformCom->Rotation(Engine::ROT_X, D3DXToRadian(90.f));
 	m_pTransformCom->Rotation(Engine::ROT_Y, D3DXToRadian(180.f));
+	m_pTransformCom->Set_Scale(0.002f, 0.002f, 0.002f);
 
 	m_iFlag = iFlag;
 
 	return S_OK;
 }
 
-_int CSword::Update_GameObject(const _float& fTimeDelta)
+_int CDisplayWeapon::Update_GameObject(const _float& fTimeDelta)
 {
-
 
 	if (nullptr == m_pParentBoneMatrix)
 	{
-		Engine::CDynamicMesh*	pPlayerMeshCom = dynamic_cast<Engine::CDynamicMesh*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Mesh", Engine::ID_STATIC));
-		NULL_CHECK_RETURN(pPlayerMeshCom, 0);
 
-		const Engine::D3DXFRAME_DERIVED* pBone = pPlayerMeshCom->Get_FrameByName("RightHandAttach");
-		NULL_CHECK_RETURN(pBone, 0);
+		Engine::CTransform*	pTargetTransform = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"UI", L"InvenUI_InfoUI", L"Com_Transform", Engine::ID_DYNAMIC));
+		NULL_CHECK_RETURN(pTargetTransform, 0);
 
-		m_pParentBoneMatrix = &pBone->CombinedTransformationMatrix;
-
-		Engine::CTransform*	pPlayerTransCom = dynamic_cast<Engine::CTransform*>(Engine::Get_Component(L"GameLogic", L"Player", L"Com_Transform", Engine::ID_DYNAMIC));
-		NULL_CHECK_RETURN(pPlayerTransCom, 0);
-
-		m_pParentWorldMatrix = pPlayerTransCom->Get_WorldMatrixPointer();
+		m_pParentWorldMatrix = pTargetTransform->Get_WorldMatrixPointer();
 	}
 
+	m_pTransformCom->Rotation(Engine::ROT_Y, D3DXToRadian(1.f));
 
 
 	Engine::CGameObject::Update_GameObject(fTimeDelta);
+	_vec3 vPos;
+	memcpy(&vPos, &m_pParentWorldMatrix->_41, sizeof(_vec3));
 
-
-	m_pTransformCom->Set_ParentMatrix(&(*m_pParentBoneMatrix * *m_pParentWorldMatrix));
-
+	//m_pTransformCom->Set_ParentMatrix(m_pParentWorldMatrix);
+	m_pTransformCom->Set_Pos(&vPos);
 	m_pRendererCom->Add_RenderGroup(Engine::RENDER_NONALPHA, this);
 
 
 	return 0;
 }
 
-void CSword::Render_GameObject(void)
+void CDisplayWeapon::Render_GameObject(void)
 {
 	//m_pGraphicDev->SetTransform(D3DTS_WORLD, &m_pTransformCom->m_matWorld);
 
@@ -89,7 +84,7 @@ void CSword::Render_GameObject(void)
 
 }
 
-HRESULT CSword::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
+HRESULT CDisplayWeapon::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
 {
 	_matrix			matWorld, matView, matProj;
 
@@ -134,7 +129,7 @@ HRESULT CSword::SetUp_ConstantTable(LPD3DXEFFECT & pEffect)
 
 
 
-HRESULT CSword::Add_Component(void)
+HRESULT CDisplayWeapon::Add_Component(void)
 {
 	Engine::CComponent*		pComponent = nullptr;
 
@@ -173,7 +168,7 @@ HRESULT CSword::Add_Component(void)
 	return S_OK;
 }
 
-_bool CSword::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
+_bool CDisplayWeapon::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
 {
 	Engine::CCollider*	pPlayerColliderCom = dynamic_cast<Engine::CCollider*>(Engine::Get_Component(pLayerTag, pObjTag, L"Com_Collider", Engine::ID_STATIC));
 	NULL_CHECK_RETURN(pPlayerColliderCom, false);
@@ -197,9 +192,9 @@ _bool CSword::Collision_ToObject(const _tchar* pLayerTag, const _tchar* pObjTag)
 											m_pColliderCom->Get_ColliderMatrix());
 }
 
-CSword* CSword::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName, const _uint& iFlag)
+CDisplayWeapon* CDisplayWeapon::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName, const _uint& iFlag)
 {
-	CSword*	pInstance = new CSword(pGraphicDev, wstrMeshName);
+	CDisplayWeapon*	pInstance = new CDisplayWeapon(pGraphicDev, wstrMeshName);
 
 	if (FAILED(pInstance->Ready_GameObject(iFlag)))
 		Engine::Safe_Release(pInstance);
@@ -207,7 +202,7 @@ CSword* CSword::Create(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrMeshName, cons
 	return pInstance;
 }
 
-void CSword::Free(void)
+void CDisplayWeapon::Free(void)
 {
 	Engine::CGameObject::Free();
 }
