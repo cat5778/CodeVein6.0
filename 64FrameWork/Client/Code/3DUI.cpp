@@ -44,7 +44,7 @@ HRESULT C3DUI::LateReady_GameObject(void)
 		Engine::Get_Layer(L"UI")->Add_GameObject(wstrButton.c_str(), pGameObject);
 
 	}
-	else if(m_eUIState<=UI_INVEN)
+	else if(m_eUIState<= UI_PORTAL)
 	{
 		CGameObject* pGameObject = nullptr;
 		pGameObject = m_pButton = C3DButton::Create(m_pGraphicDev, L"Select2",m_pTransformCom , m_eUIState);

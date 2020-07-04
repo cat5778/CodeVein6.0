@@ -18,6 +18,7 @@ C3DIcon::C3DIcon(LPDIRECT3DDEVICE9 pGraphicDev, wstring wstrTexName, Engine::CTr
 	case UI_PORTAL:
 		m_wstrInstName = m_wstrTexName + L"_PortalIcon";
 		break;
+
 	}
 }
 
@@ -30,12 +31,22 @@ HRESULT C3DIcon::Ready_GameObject(void)
 {
 	FAILED_CHECK_RETURN(Add_Component(), E_FAIL);
 	
-
-	m_vScale.x = m_pTextureCom->Get_ImageInfo().Width	*0.002f;
-	m_vScale.y = m_pTextureCom->Get_ImageInfo().Height	*0.002f;
-	m_vScale.z = m_pTextureCom->Get_ImageInfo().Width	*0.002f;
-	m_pTransformCom->Set_Scale(m_vScale.x*0.825f, m_vScale.y*0.625f, m_vScale.z*0.825f);
 	
+	if (m_wstrTexName.compare(L"Waypoint") == 0)
+	{
+		m_vScale.x = m_pTextureCom->Get_ImageInfo().Width	*0.001f;
+		m_vScale.y = m_pTextureCom->Get_ImageInfo().Height	*0.001f;
+		m_vScale.z = m_pTextureCom->Get_ImageInfo().Width	*0.001f;
+		m_pTransformCom->Set_Scale(m_vScale.x*0.5f, m_vScale.y*2.f, m_vScale.z*0.5f);
+	}
+	else
+	{
+		m_vScale.x = m_pTextureCom->Get_ImageInfo().Width	*0.002f;
+		m_vScale.y = m_pTextureCom->Get_ImageInfo().Height	*0.002f;
+		m_vScale.z = m_pTextureCom->Get_ImageInfo().Width	*0.002f;
+
+		m_pTransformCom->Set_Scale(m_vScale.x*0.825f, m_vScale.y*0.625f, m_vScale.z*0.825f);
+	}
 
 
 	return S_OK;
@@ -46,11 +57,12 @@ HRESULT C3DIcon::LateReady_GameObject(void)
 
 	m_pCam=dynamic_cast<CThirdPersonCamera*>(Engine::Get_GameObject(L"UI", L"ThirdPersonCamera"));
 	CGameObject* pGameObject = nullptr;
-
-	pGameObject = m_pNumber = C3DNumBer::Create(m_pGraphicDev, L"Number", m_pTransformCom);
-	wstring wstrNum = m_wstrInstName + L"_Number";
-	Engine::Get_Layer(L"UI")->Add_GameObject(wstrNum.c_str(), pGameObject);
-
+	if (m_eUIState != UI_PORTAL)
+	{
+		pGameObject = m_pNumber = C3DNumBer::Create(m_pGraphicDev, L"Number", m_pTransformCom);
+		wstring wstrNum = m_wstrInstName + L"_Number";
+		Engine::Get_Layer(L"UI")->Add_GameObject(wstrNum.c_str(), pGameObject);
+	}
 
 	return S_OK;
 }
@@ -61,6 +73,7 @@ _int C3DIcon::Update_GameObject(const _float& fTimeDelta)
 		return 0;
 
 	m_pTransformCom->Set_Pos(m_vPos.x, m_vPos.y, m_vPos.z);
+
 	Engine::CGameObject::Update_GameObject(fTimeDelta);	
 	m_pTargetTransformCom->Get_WorldMatrix(&m_matTargetWorld);
 	m_pTransformCom->Set_ParentMatrix(&m_matTargetWorld);

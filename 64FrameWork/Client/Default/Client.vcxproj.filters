@@ -324,6 +324,9 @@
     <ClInclude Include="..\Code\Portal.h">
       <Filter>02. GameObejct\02. Public\05. UI\3DUI\Portal</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\PortalSub.h">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Portal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -471,6 +474,9 @@
       <Filter>02. GameObejct\02. Public\05. UI\3DUI\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Portal.cpp">
+      <Filter>02. GameObejct\02. Public\05. UI\3DUI\Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PortalSub.cpp">
       <Filter>02. GameObejct\02. Public\05. UI\3DUI\Portal</Filter>
     </ClCompile>
   </ItemGroup>

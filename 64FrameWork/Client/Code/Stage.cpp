@@ -97,7 +97,7 @@ _int CStage::Update_Scene(const _float& fTimeDelta)
 
 
 
-	if (CKeyMgr::GetInstance()->KeyDown(KEY_R))
+	if (m_pPlayer->ChangeScene())
 	{
 
 		Engine::CScene*		pScene = CField::Create(m_pGraphicDev);
@@ -158,7 +158,7 @@ HRESULT CStage::Ready_GameLogic_Layer(const _tchar* pLayerTag)
 	Engine::CGameObject*		pGameObject = nullptr;
 
 	//// Player
-	pGameObject = CPlayer::Create(m_pGraphicDev);
+	pGameObject = m_pPlayer = CPlayer::Create(m_pGraphicDev);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"Player", pGameObject), E_FAIL);
 

@@ -200,6 +200,7 @@
     <ClInclude Include="..\Code\Monster.h" />
     <ClInclude Include="..\Code\Player.h" />
     <ClInclude Include="..\Code\Portal.h" />
+    <ClInclude Include="..\Code\PortalSub.h" />
     <ClInclude Include="..\Code\Projectile.h" />
     <ClInclude Include="..\Code\RedDevil.h" />
     <ClInclude Include="..\Code\RussianHat.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="..\Code\Monster.cpp" />
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\Portal.cpp" />
+    <ClCompile Include="..\Code\PortalSub.cpp" />
     <ClCompile Include="..\Code\Projectile.cpp" />
     <ClCompile Include="..\Code\RedDevil.cpp" />
     <ClCompile Include="..\Code\RussianHat.cpp" />

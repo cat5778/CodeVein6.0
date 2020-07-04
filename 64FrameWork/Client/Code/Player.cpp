@@ -14,7 +14,7 @@
 #include "Inven.h"
 #include "Sword.h"
 #include "Portal.h"
-
+#include "PortalSub.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphicDev, _uint uiIdx,_uint uiStageIdx)
 	: Engine::CGameObject(pGraphicDev)
@@ -131,19 +131,22 @@ HRESULT CPlayer::LateReady_GameObject(void)
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"ShopUI", pGameObject), E_FAIL);
 	
-	pGameObject = m_pInvenSub = CInvenSub::Create(m_pGraphicDev, L"InvenFrame", 2.f, 40.f, true, UI_INVEN_SUB);
-	NULL_CHECK_RETURN(pGameObject, E_FAIL);
-	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"InvenSubUI", pGameObject), E_FAIL);
 
 	pGameObject = m_pInven = CInven::Create(m_pGraphicDev, L"EmptyFrame", 2.f, -40.f, false, UI_INVEN);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"InvenUI", pGameObject), E_FAIL);
 
-	pGameObject = m_pPortal = CPortal::Create(m_pGraphicDev, L"EmptyFrame", 2.f, -40.f, false, UI_PORTAL);
+	pGameObject = m_pInvenSub = CInvenSub::Create(m_pGraphicDev, L"InvenFrame", 2.f, 40.f, true, UI_INVEN_SUB);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"InvenSubUI", pGameObject), E_FAIL);
+
+	pGameObject = m_pPortal = CPortal::Create(m_pGraphicDev, L"PortalEmpty", 2.f, -40.f, false, UI_PORTAL);
 	NULL_CHECK_RETURN(pGameObject, E_FAIL);
 	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"PortalUI", pGameObject), E_FAIL);
 
-
+	pGameObject = m_pPortalSub = CPortalSub::Create(m_pGraphicDev, L"PortalUI", 2.f, 40.f, true, UI_PORTAL_SUB);
+	NULL_CHECK_RETURN(pGameObject, E_FAIL);
+	FAILED_CHECK_RETURN(pLayer->Add_GameObject(L"PortalSubUI", pGameObject), E_FAIL);
 
 	pLayer = Engine::Get_Layer(L"GameLogic");
 	//// //Sword2
@@ -178,6 +181,7 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 {
 
 	PlayerUI();
+	
 	UpdateGague(fTimeDelta);
 
 	m_pColliderGroupCom->Set_ColliderEnable(Engine::COLOPT_ATTACK, false);
@@ -1070,6 +1074,10 @@ void CPlayer::StateMachine()
 
 		}
 			break;
+		case OBJ_CHECKPOINT_START:
+			m_pMeshCom->Set_AnimationSet(8);
+
+			break;
 		case OBJ_END:
 			break;
 		default:
@@ -1115,7 +1123,9 @@ void CPlayer::CheckMoveMesh(_float fTimeDelta, Engine::CTransform * pTransform, 
 			m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir * fSpeed* fTimeDelta), &vOutPos);
 		else
 			m_pNaviCom->Move_OnNaviMesh(&vPos, &(-vDir * fSpeed* fTimeDelta), &vOutPos);
-		
+		m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
+			
+
 	}
 	else
 	{
@@ -1129,9 +1139,9 @@ void CPlayer::CheckMoveMesh(_float fTimeDelta, Engine::CTransform * pTransform, 
 		vDir += vDiagonalDir;
 		D3DXVec3Normalize(&vDir, &vDir);
 		m_pNaviCom->Move_OnNaviMesh(&vPos, &(vDir * fSpeed* fTimeDelta), &vOutPos);
-	
+		m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
+
 	}
-	m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
 
 }
 
@@ -1494,7 +1504,8 @@ void CPlayer::Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage)
 	else if (cosf(D3DXToRadian(fAngle)) <= -fCos60)
 		m_dwHurtDirectionFlag |= RIGHT;
 
-	cout << m_dwHurtDirectionFlag << endl;
+	//cout << m_dwHurtDirectionFlag << endl;
+	m_fCurHP -= 10.f;
 
 
 	m_vKnockBackDir = vDir;
@@ -1509,7 +1520,7 @@ void CPlayer::Hurt(_vec3 vPos, _vec3 vTargetPos, _float fDamage)
 	}
 	switch (m_dwHurtDirectionFlag)	
 	{
-
+		
 		case DIR_F:
 			bIsStrongAttack ? m_eCurState = OBJ_STRONG_HURT_F	: m_eCurState = OBJ_HURT_F;
 			break;
@@ -1620,6 +1631,7 @@ void CPlayer::PlayerUI()
 	{
 		m_eCurState = OBJ_IDLE;
 		m_pPortal->ChangeEnable();
+		m_pPortalSub->ChangeEnable();
 		m_bIsLockOn = !m_bIsLockOn;
 	}
 
@@ -1672,6 +1684,19 @@ void CPlayer::PlayerUI()
 				}
 			}
 		}
+		else if (m_pPortal->IsOn())
+		{
+			
+			if (m_pPortal->Get_PortalIdx() == 1)
+			{
+				if (m_pPortalSub->Get_ItemName().find(L"¿Ãµø") != wstring::npos)
+				{
+					m_bIsSceneChangeFlag = true;
+				}
+
+			}
+		}
+
 	}
 
 

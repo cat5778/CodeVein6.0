@@ -12,12 +12,12 @@ class CTexture;
 class CTransform;
 class CRenderer;
 class CShader;
-
 END
+
 class CThirdPersonCamera;
 class C3DButton;
 class C3DIcon; 
-class CPortalInfo;
+//class CPortalInfo;
 class CPortal : public C3DUI
 {
 private:
@@ -25,25 +25,26 @@ private:
 	virtual ~CPortal(void);
 
 public:
-	virtual HRESULT Ready_GameObject(void) override;
-	virtual HRESULT	LateReady_GameObject(void);
-	virtual _int Update_GameObject(const _float& fTimeDelta) override;
+	virtual HRESULT		Ready_GameObject(void) override;
+	virtual HRESULT		LateReady_GameObject(void);
+	virtual _int		Update_GameObject(const _float& fTimeDelta) override;
 	
-	virtual void Render_GameObject(void) override;
+	virtual void		Render_GameObject(void) override;
 
 public:
 	virtual void		ChangeEnable(_bool bIsEnable)override;
 	virtual void		ChangeEnable()override;
 
-
+public:
+	_uint				Get_PortalIdx();
 private:
 	virtual HRESULT		Add_Component(void);
 	virtual HRESULT		SetUp_ConstantTable(LPD3DXEFFECT& pEffect);
 
 private:
-	C3DIcon*						m_pIcon[2] = { nullptr,nullptr };
-	CPortalInfo*						m_pInfoUI = nullptr;
-
+	C3DIcon*						m_pIcon = nullptr;
+	//CPortalInfo*					m_pInfoUI = nullptr;
+	_uint							m_uiWaypointIdx = 0;
 	//TEst
 	_vec3							m_vTempTest = { INIT_VEC3 };
 

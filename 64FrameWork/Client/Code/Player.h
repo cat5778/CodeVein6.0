@@ -49,6 +49,7 @@ public:
 	DWORD				Get_Dodge() { return m_dwDodge_DirectionFlag; }
 	vector<pair<wstring, _uint>>*	Get_InvenVec() {return &m_InventoryVec;}
 	void							Set_InvenVec(vector<pair<wstring, _uint>> InvenVec) {m_InventoryVec = InvenVec;}
+	_bool							ChangeScene() {return m_bIsSceneChangeFlag;}
 private:
 	HRESULT				Add_Component(void);
 	void				Key_Input(const _float& fTimeDelta);
@@ -95,6 +96,7 @@ private:
 	Engine::CCollider*		m_pColliderCom = nullptr;
 	Engine::CShader*		m_pShaderCom = nullptr;
 	Engine::CColliderGroup*	m_pColliderGroupCom=nullptr;
+	_bool					m_bIsSceneChangeFlag=false;
 
 	CKeyMgr*				m_pKeyMgr = nullptr;
 	CThirdPersonCamera*		m_pCam = nullptr;
@@ -135,7 +137,8 @@ private:
 	CShopSub*				m_pShopSub = nullptr;
 	CInven*					m_pInven = nullptr;
 	CInvenSub*				m_pInvenSub = nullptr;
- 	CPortal*				m_pPortal = nullptr;
+	CPortal*				m_pPortal = nullptr;
+	CPortalSub*				m_pPortalSub = nullptr;
 
 	//weapon
 	CSword*					m_pSword[3] = { nullptr,nullptr,nullptr };

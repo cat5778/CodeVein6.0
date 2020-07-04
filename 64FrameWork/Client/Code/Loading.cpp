@@ -397,15 +397,16 @@ _bool CLoading::Loading_Basic()
 		E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,
-		L"T_HomeA_UI",
+		L"PortalEmpty",
 		Engine::TEX_NORMAL,
-		L"../../Resource/Texture/WayPointImage/T_HomeA_UI.tga"),
+		L"../../Resource/Texture/WayPointImage/PortalEmpty.tga"),
 		E_FAIL);
+
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,
-		L"T_st09E_UI",
+		L"Waypoint",
 		Engine::TEX_NORMAL,
-		L"../../Resource/Texture/WayPointImage/T_st09E_UI.tga"),
+		L"../../Resource/Texture/WayPointImage/Waypoint.tga"),
 		E_FAIL);
 	FAILED_CHECK_RETURN(Engine::Ready_Texture(m_pGraphicDev,
 		RESOURCE_STAGE,

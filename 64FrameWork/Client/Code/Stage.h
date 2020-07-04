@@ -16,7 +16,7 @@
 #include "Stone.h"
 #include "Sword.h"
 
-
+class CPlayer;
 class CStage : public Engine::CScene
 {
 private:
@@ -55,7 +55,7 @@ private:
 	_float								m_fTest = 0.f;
 	_float								m_fTest2 =1.f;
 	_float								m_fTest3= 1.f;
-
+	CPlayer*							m_pPlayer = nullptr;
 public:
 	static CStage*		Create(LPDIRECT3DDEVICE9 pGraphicDev);
 
