@@ -410,6 +410,7 @@ BOOL CObjectTool::OnInitDialog()
 		fout << CW2A(pPathInfo->wstrName.c_str()) << endl;
 		fout << CW2A(pPathInfo->wstrObjectType.c_str()) << endl;
 		fout << CW2A(pPathInfo->wstrRelative.c_str()) << endl;
+		
 	}
 		fout.close();
 

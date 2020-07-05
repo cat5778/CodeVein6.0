@@ -223,7 +223,7 @@ _int CPlayer::Update_GameObject(const _float& fTimeDelta)
 
 	//_vec3 vPos = *m_pTransformCom->Get_Info(Engine::INFO_POS);
 	//cout << "X=" << vPos.x << "y=" << vPos.y << "Z=" << vPos.z << endl;
-	//cout << "Cur Cell " << m_pNaviCom->Get_CurIndex() << endl;
+	cout << "Cur Cell " << m_pNaviCom->Get_CurIndex() << endl;
 	//Guard_H(fTimeDelta);
 
 
