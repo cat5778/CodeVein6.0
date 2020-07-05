@@ -44,14 +44,14 @@ _int CDynamicCamera::Update_GameObject(const _float& fTimeDelta)
 	m_bIsNavPick = false;
 	if (m_pKeyMgr->KeyUp(KEY_LBUTTON))
 	{
-	if (m_iPickMode == 0)
-		Picking_Mesh();
-		else if (m_iPickMode == 1)
-		{
-			Pickint_Nav();
-			if (!m_bIsNavPick)
-				Picking_Mesh();
-		}
+	//if (m_iPickMode == 0)
+	//	Picking_Mesh();
+	//	else if (m_iPickMode == 1)
+	//	{
+	//		Pickint_Nav();
+	//		if (!m_bIsNavPick)
+	//			Picking_Mesh();
+	//	}
 
 	}
 	else

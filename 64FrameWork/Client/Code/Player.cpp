@@ -45,9 +45,12 @@ HRESULT CPlayer::Ready_GameObject(void)
 		Load_Text(L"../../Resource/Data/NavMash/BaseCompleteNav.txt");
 		break;
 	case LOAD_NOMAL2:
-		m_pTransformCom->Set_Pos(-14.7f, 2.16f, -20.2f); //Boss
-		m_pNaviCom->Set_Index(70);// Base Init Idx 38 
-		Load_Text(L"../../Resource/Data/NavMash/Temp5.txt");
+		//m_pTransformCom->Set_Pos(-14.7f, 2.16f, -20.2f); //Boss
+		//m_pNaviCom->Set_Index(70);// Base Init Idx 38 
+		//Load_Text(L"../../Resource/Data/NavMash/Temp5.txt");
+		m_pTransformCom->Set_Pos(50.f, -4.75f, 58.f); //New Map StartPos 
+		m_pNaviCom->Set_Index(1);// Base Init Idx 38 
+		Load_Text(L"../../Resource/Data/NavMash/AttachMapNav.txt");
 
 		//m_pTransformCom->Set_Pos(-85.f, 1.3f, 0.01f);Start
 		//m_pNaviCom->Set_Index(0);// Base Init Idx 38 

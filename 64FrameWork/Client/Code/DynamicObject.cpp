@@ -236,20 +236,6 @@ void CDynamicObject::MoveAni(_float fTimeDelta, _float fMinRatio, _float fMaxRat
 			vDivPos = vOutPos;
 		}
 		m_pTransformCom->Set_Pos(vDivPos.x, vDivPos.y, vDivPos.z);
-
-
-
-
-
-		//vPos = Get_Pos();
-		//if(!bIsJump)
-		//	m_pNaviCom->Move_OnNaviMesh(&Get_Pos(), &(vTempDir * fSpeed* fTimeDelta), &vOutPos);
-		//else
-		//	m_pNaviCom->Jump_OnNaviMesh(&Get_Pos(), &(vTempDir * fSpeed* fTimeDelta), &vOutPos);
-
-		//
-		//m_pTransformCom->Set_Pos(vOutPos.x, vOutPos.y, vOutPos.z);
-
 	}
 }
 
